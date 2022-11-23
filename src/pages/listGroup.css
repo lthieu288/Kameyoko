@@ -1,0 +1,18 @@
+.item-group {
+  transition: transform 0.2s;
+  /* Animation */
+}
+
+.item-group:hover {
+  color: #0070f3;
+  transform: scale(1.1);
+}
+
+.name-group {
+  font-style: center;
+  text-align: center;
+}
+.create-group {
+  display: flex;
+  justify-content: end;
+}
