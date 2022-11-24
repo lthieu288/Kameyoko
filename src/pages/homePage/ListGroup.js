@@ -10,7 +10,7 @@ import Button from "react-bootstrap/Button";
 const ListGroup = () => {
   return (
     <>
-      <Container style={{ marginTop: "20px" }}>
+      <Container style={{ marginTop: "20px" , minHeight: "40rem"}}>
         <div className="create-group">
           <Button style={{ marginBottom: "20px" }} variant="outline-primary">
             <Link className="nav-link" variant="outline-primary" to="/create-group">
