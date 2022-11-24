@@ -1,11 +1,18 @@
 import "./App.css";
-import { Button } from "react-bootstrap";
+import { Routes, Route } from "react-router-dom";
+import Register from "./Pages/Register";
+import Login from "./Pages/Login";
 
 function App() {
   return (
-    <div className="App">
-      <Button variant="primary">Kameyoko</Button>
-    </div>
+    <>
+      <Routes>
+        <Route index element={<Login />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
+        <Route path="*" element={<p>There's nothing here: 404!</p>} />
+      </Routes>
+    </>
   );
 }
 
