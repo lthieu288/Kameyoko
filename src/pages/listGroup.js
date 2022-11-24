@@ -1,5 +1,5 @@
 import React from "react";
-import "./listGroup.css";
+import "./group.css";
 import { Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
@@ -7,13 +7,15 @@ import Row from "react-bootstrap/Row";
 import { Container } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 
-const listGroup = () => {
+const ListGroup = () => {
   return (
     <>
       <Container style={{ marginTop: "20px" }}>
         <div className="create-group">
           <Button style={{ marginBottom: "20px" }} variant="outline-primary">
-            Create Group
+            <Link className="nav-link" variant="outline-primary" to="/create-group">
+              Create Group
+            </Link>
           </Button>{" "}
         </div>
         <Row xs={2} md={4} className="g-4">
@@ -123,4 +125,4 @@ const listGroup = () => {
   );
 };
 
-export default listGroup;
+export default ListGroup;
