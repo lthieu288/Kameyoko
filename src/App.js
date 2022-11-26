@@ -1,19 +1,35 @@
 import "./App.css";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import ListGroup from "./pages/homePage/ListGroup";
-import CreateGroup from "./pages/homePage/CreateGroup";
-import EditProfile from "./pages/profile/EditProfile";
-import Footer from "./pages/footer/Footer";
-import Navbar from "./pages/navbar/Navbar";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import ListGroup from "./Pages/homePage/ListGroup";
+import CreateGroup from "./Pages/homePage/CreateGroup";
+import EditProfile from "./Pages/profile/EditProfile";
 import Register from "./Pages/Register";
 import Login from "./Pages/Login";
+import GroupDetail from "./Pages/GroupDetail";
+import { useAuthState } from "./Context";
+
 function App() {
+  const userDetails = useAuthState();
   return (
     <>
-      <Navbar />
       <Router>
         <Routes>
-          <Route index element={<Login />} />
+          <Route
+            path="/groups"
+            element={
+              !Boolean(userDetails.token) ? (
+                <Navigate to={"/login"} replace />
+              ) : (
+                <GroupDetail />
+              )
+            }
+          />
+          <Route index element={<ListGroup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route exact path="/" element={<ListGroup />} />
@@ -22,7 +38,6 @@ function App() {
           <Route path="*" element={<p>There's nothing here: 404!</p>} />
         </Routes>
       </Router>
-      <Footer />
     </>
   );
 }

@@ -6,14 +6,22 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { Container } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
+import Footer from "../../components/Footer";
+import Navbar from "../../components/navbar/Navbar";
 
 const ListGroup = () => {
   return (
     <>
-      <Container style={{ marginTop: "20px" , minHeight: "40rem"}}>
+      <Navbar />
+
+      <Container style={{ marginTop: "20px", minHeight: "40rem" }}>
         <div className="create-group">
           <Button style={{ marginBottom: "20px" }} variant="outline-primary">
-            <Link className="nav-link" variant="outline-primary" to="/create-group">
+            <Link
+              className="nav-link"
+              variant="outline-primary"
+              to="/create-group"
+            >
               Create Group
             </Link>
           </Button>{" "}
@@ -121,6 +129,7 @@ const ListGroup = () => {
           </Col>
         </Row>
       </Container>
+      <Footer />
     </>
   );
 };

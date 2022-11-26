@@ -15,13 +15,13 @@ function GroupDetailLeft() {
       <div className="text-center">
         <img
           src={img}
-          class="rounded"
+          className="rounded"
           style={{ height: "100px" }}
           alt="Cinque Terre"
         />
       </div>
       <h4 className="text-center my-3">Group Name</h4>
-      <div class="form-outline d-flex">
+      <div className="form-outline d-flex">
         <TextField
           label="Fullname"
           variant="outlined"

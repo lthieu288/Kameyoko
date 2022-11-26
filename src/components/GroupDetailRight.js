@@ -7,7 +7,7 @@ function GroupDetailRight() {
       <div className="text-center">
         <img
           src={img}
-          class="rounded"
+          className="rounded"
           style={{ height: "100px" }}
           alt="Cinque Terre"
         />
@@ -16,12 +16,12 @@ function GroupDetailRight() {
       <hr />
       <h2>I Love Food</h2>
       <h5>
-        <span class="glyphicon glyphicon-time"></span> Post by Jane Dane, Sep
-        27, 2015.
+        <span className="glyphicon glyphicon-time"></span> Post by Jane Dane,
+        Sep 27, 2015.
       </h5>
       <h5>
-        <span class="label label-danger">Food</span>{" "}
-        <span class="label label-primary">Ipsum</span>
+        <span className="label label-danger">Food</span>{" "}
+        <span className="label label-primary">Ipsum</span>
       </h5>
       <p>
         Food is my passion. Lorem ipsum dolor sit amet, consectetur adipiscing
@@ -40,11 +40,11 @@ function GroupDetailRight() {
       <hr />
       <h2>Officially Blogging</h2>
       <h5>
-        <span class="glyphicon glyphicon-time"></span> Post by John Doe, Sep 24,
-        2015.
+        <span className="glyphicon glyphicon-time"></span> Post by John Doe, Sep
+        24, 2015.
       </h5>
       <h5>
-        <span class="label label-success">Lorem</span>
+        <span className="label label-success">Lorem</span>
       </h5>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -60,17 +60,17 @@ function GroupDetailRight() {
 
       <h4>Leave a Comment:</h4>
       <form>
-        <div class="form-group">
-          <textarea class="form-control" rows="3" required></textarea>
+        <div className="form-group">
+          <textarea className="form-control" rows="3" required></textarea>
         </div>
-        <button type="submit" class="btn btn-success">
+        <button type="submit" className="btn btn-success">
           Submit
         </button>
       </form>
       <br />
 
       <p>
-        <span class="badge">2</span> Comments:
+        <span className="badge">2</span> Comments:
       </p>
       <br />
       <form />
