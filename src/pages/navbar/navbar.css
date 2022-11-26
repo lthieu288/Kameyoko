@@ -1,0 +1,7 @@
+.collapse{
+    display: flex;
+    justify-content: end;
+}
+.container-fluid{
+    background-color: black;
+}
