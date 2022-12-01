@@ -12,6 +12,7 @@ import Register from "./Pages/Register";
 import Login from "./Pages/Login";
 import GroupDetail from "./Pages/GroupDetail";
 import JoinGroup from "./Pages/JoinGroup";
+import GroupMemberDetail from "./components/GroupMemberDetail";
 
 function App() {
   return (
@@ -22,7 +23,8 @@ function App() {
           <Route path="/register" element={<Register />} />
 
           <Route index element={<HomePage />} />
-          <Route path="/groups" element={<GroupDetail />} />
+          <Route path="/groups/:id" element={<GroupMemberDetail />} />
+          <Route path="/groups/member/:id" element={<GroupDetail />} />
           <Route path="/profile" element={<EditProfile />} />
           <Route exact path="/" element={<HomePage />} />
           <Route exact path="/create-group" element={<CreateGroup />} />
