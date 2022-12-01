@@ -1,24 +1,43 @@
 import React from "react";
 import img from "../images.png";
 import Swal from "sweetalert2";
-
+import { ediUserRoleGroup} from "../services/auth";
+import {
+  useNavigate,
+} from 'react-router-dom';
 function GroupMemberDetail(props) {
-  console.log(props);
+
+  const navigate = useNavigate();
+
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
   const role = props.role === "co-owner" ? "member" : "co-owner";
-  function handleChangeRole() {
+  const handleChangeRole = async () => {
     Swal.fire({
       title: "Do you want to assign this user to " + role + "?",
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Assign",
-    }).then((result) => {
+    }).then( async (result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-          icon: "success",
-          title: "Assign successfully",
-          showConfirmButton: false,
-          timer: 1000,
-        });
+        let idRole;
+        role ==="co-owner" ? idRole = 2 : idRole=3;
+        await ediUserRoleGroup(currentUser.data.token,props.idgroup,props.id,idRole).then((response) => {
+          if (response.status === 200) {
+            Swal.fire({
+              icon: "success",
+              title: "Assign successfully",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+            navigate("/groups/"+props.idgroup)
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: response.message,
+            });
+          }
+        })
       }
     });
   }

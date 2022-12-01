@@ -53,3 +53,12 @@ export async function getGroups(token) {
     });
     return response.json();
 }
+
+export async function ediUserRoleGroup(token,idGroup , idUser, idRole){
+    const response = await fetch('http://localhost:7777/group/'+idGroup+'/edit' +"?userId="+idUser+"&role="+idRole, {
+        method: 'POST',
+        headers: {'Content-type': 'application/json; charset=UTF-8', 'Authorization': token},
+    });
+    if (response.status === 200) return response;
+    else return response.json();
+}

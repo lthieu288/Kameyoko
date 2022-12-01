@@ -84,6 +84,7 @@ function MemberDetail() {
             id={userId}
             email={email}
             role={role}
+            idgroup={group}
           />
         </div>
       </Row>
