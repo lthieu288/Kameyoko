@@ -11,7 +11,7 @@ import { Row } from "react-bootstrap";
 function GroupDetail() {
   const navigate = useNavigate();
   const userDetails = useAuthState();
-  const [groupData, setGroupData] = useState(null);
+  const [groupData, setGroupData] = useState();
   const [member, setMember] = useState(null);
   const id = useParams();
 
@@ -23,12 +23,12 @@ function GroupDetail() {
       await request
         .get("group/" + id.id + "/general", {
           headers: {
-            Authorization: JSON.parse(localStorage.getItem("currentUser"))
+            Authorization: JSON.parse(localStorage.getItem("currentUser")).data
               .token,
           },
         })
         .then((res) => {
-          setGroupData(res.data);
+          setGroupData(res.data.group_data);
         })
         .catch((error) => {
           console.log(error);
@@ -38,12 +38,12 @@ function GroupDetail() {
       await request
         .get("group/" + id.id + "/details", {
           headers: {
-            Authorization: JSON.parse(localStorage.getItem("currentUser"))
+            Authorization: JSON.parse(localStorage.getItem("currentUser")).data
               .token,
           },
         })
         .then((res) => {
-          setMember(res.data);
+          setMember(res.data.groups_data);
         })
         .catch((error) => {
           console.log(error);
@@ -51,25 +51,24 @@ function GroupDetail() {
     }
     getGroup();
     getMember();
-    console.log(groupData);
-    console.log(member);
-  }, [localStorage.getItem("currentUser")]);
+  }, [JSON.parse(localStorage.getItem("currentUser")).data.token]);
 
+  if (!groupData) return <p>No Data</p>;
   return (
     <>
       <Navbar username={userDetails.user ? userDetails.user.username : null} />
       <Row className="row App">
         <div className="col-3">
           <GroupDetailLeft
-            name={groupData ? groupData.group_data.name : null}
-            list={member ? member.groups_data : []}
-            id={groupData ? groupData.group_data.id : null}
+            name={groupData ? groupData.name : null}
+            list={member ? member : []}
+            id={groupData ? groupData.id : null}
           />
         </div>
         <div className="col-9">
           <GroupDetailRight
-            name={groupData ? groupData.group_data.name : null}
-            link={groupData ? groupData.group_data.link : null}
+            name={groupData ? groupData.name : null}
+            link={groupData ? groupData.link : null}
           />
         </div>
       </Row>
