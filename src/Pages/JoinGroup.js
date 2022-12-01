@@ -5,7 +5,7 @@ function JoinGroup() {
   const navigate = useNavigate();
   useEffect(() => {
     if (!localStorage.getItem("currentUser")) {
-      navigate("/login");
+      navigate("/login?redirect=groups/");
     }
   }, [localStorage.getItem("currentUser")]);
   return <div>JoinGroup</div>;

@@ -39,7 +39,7 @@ function Login() {
 
         if (redirect) {
           console.log(redirect);
-          navigate(`/${redirect}`);
+          navigate(`/${redirect === null ? "" : redirect}`);
         } else {
           navigate("/");
         }
