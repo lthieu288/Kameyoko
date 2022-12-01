@@ -1,6 +1,14 @@
 import React from "react";
+import Dropdown from "react-bootstrap/Dropdown";
+import { useParams } from "react-router-dom";
 
-function Navbar() {
+function Navbar(props) {
+  const handleLogout = () => {
+    localStorage.removeItem("currentUser");
+  };
+  const user = JSON.parse(localStorage.getItem("currentUser"));
+  const id = useParams();
+
   return (
     <>
       <div>
@@ -8,20 +16,21 @@ function Navbar() {
           <a className="navbar-brand" href="/">
             KAMEYOKO
           </a>
-          <div className="" id="navbarSupportedContent">
-            <form className="d-flex">
-              <button
-                className="btn btn-outline-success"
-                type="button"
-                style={{ marginRight: "10px" }}
+          <Dropdown>
+            <Dropdown.Toggle variant="info">
+              {user ? user.user.username : null}
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item href={"/profile/" + id.id}>Profile</Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => handleLogout()}
+                href="/login?redirect="
               >
-                Login
-              </button>
-              <button className="btn btn-outline-success" type="button">
-                Register
-              </button>
-            </form>
-          </div>
+                Logout
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </nav>
       </div>
     </>

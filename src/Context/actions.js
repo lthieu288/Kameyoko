@@ -4,7 +4,7 @@ export async function loginUser(dispatch, loginPayload) {
   try {
     dispatch({ type: "REQUEST_LOGIN" });
     let response = await request
-      .post("auth/login", loginPayload)
+      .post("api/auth/login", loginPayload)
       .then((res) => {
         return res;
       })
@@ -14,8 +14,8 @@ export async function loginUser(dispatch, loginPayload) {
     let data = response;
 
     if (data.status === 200) {
+      localStorage.setItem("currentUser", JSON.stringify(data.data));
       dispatch({ type: "LOGIN_SUCCESS", payload: data.data });
-      localStorage.setItem("currentUser", JSON.stringify(data));
       return data;
     }
     dispatch({ type: "LOGIN_ERROR", error: "Invalid email or password" });

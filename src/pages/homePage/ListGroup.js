@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./group.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
@@ -10,6 +10,12 @@ import Footer from "../../components/Footer";
 import Navbar from "../../components/navbar/Navbar";
 
 const ListGroup = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!localStorage.getItem("currentUser")) {
+      navigate("/login?redirect=");
+    }
+  }, [localStorage.getItem("currentUser")]);
   return (
     <>
       <Navbar />

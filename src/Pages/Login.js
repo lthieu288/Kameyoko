@@ -27,13 +27,22 @@ function Login() {
     };
     try {
       let response = await loginUser(dispatch, payload);
+      console.log(response);
       if (!response) {
         Swal.fire({
           icon: "error",
           title: "Incorrect email or password",
         });
       } else {
-        navigate("/groups");
+        const query = new URLSearchParams(window.location.search);
+        const redirect = decodeURIComponent(query.get("redirect"));
+
+        if (redirect) {
+          console.log(redirect);
+          navigate(`/${redirect}`);
+        } else {
+          navigate("/");
+        }
       }
     } catch (error) {
       console.log(error);

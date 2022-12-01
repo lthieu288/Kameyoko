@@ -1,27 +1,31 @@
 import React, { useState, useEffect } from "react";
 import Footer from "../components/Footer";
 import GroupDetailLeft from "../components/GroupDetailLeft";
-import GroupDetailRight from "../components/GroupDetailRight";
+import GroupMemberDetail from "../components/GroupMemberDetail";
 import Navbar from "../components/navbar/Navbar";
 import { useAuthState } from "../Context";
 import request from "../utils/request";
 import { useParams, useNavigate } from "react-router-dom";
 import { Row } from "react-bootstrap";
 
-function GroupDetail() {
+function MemberDetail() {
   const navigate = useNavigate();
   const userDetails = useAuthState();
   const [groupData, setGroupData] = useState(null);
   const [member, setMember] = useState(null);
-  const id = useParams();
+  const [username, setUsername] = useState(null);
+  const [role, setRole] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [email, setEmail] = useState(null);
+  const { group, id } = useParams();
 
   useEffect(() => {
     if (!localStorage.getItem("currentUser")) {
-      navigate("/login?redirect=groups/" + id.id);
+      navigate("/login?redirect=groups/member/" + id.id);
     }
     async function getGroup() {
       await request
-        .get("group/" + id.id + "/general", {
+        .get("group/" + group + "/general", {
           headers: {
             Authorization: JSON.parse(localStorage.getItem("currentUser"))
               .token,
@@ -36,7 +40,7 @@ function GroupDetail() {
     }
     async function getMember() {
       await request
-        .get("group/" + id.id + "/details", {
+        .get("group/" + group + "/details", {
           headers: {
             Authorization: JSON.parse(localStorage.getItem("currentUser"))
               .token,
@@ -44,6 +48,15 @@ function GroupDetail() {
         })
         .then((res) => {
           setMember(res.data);
+          for (var i = 0; i < res.data.groups_data.length; i++) {
+            if (res.data.groups_data[i].user_id.id == id) {
+              console.log(res.data.groups_data[i].user_id.username);
+              setUsername(res.data.groups_data[i].user_id.username);
+              setRole(res.data.groups_data[i].role);
+              setUserId(res.data.groups_data[i].user_id.id);
+              setEmail(res.data.groups_data[i].user_id.email);
+            }
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -51,8 +64,6 @@ function GroupDetail() {
     }
     getGroup();
     getMember();
-    console.log(groupData);
-    console.log(member);
   }, [localStorage.getItem("currentUser")]);
 
   return (
@@ -67,9 +78,11 @@ function GroupDetail() {
           />
         </div>
         <div className="col-9">
-          <GroupDetailRight
-            name={groupData ? groupData.group_data.name : null}
-            link={groupData ? groupData.group_data.link : null}
+          <GroupMemberDetail
+            username={username ? username : null}
+            id={userId}
+            email={email}
+            role={role}
           />
         </div>
       </Row>
@@ -78,4 +91,4 @@ function GroupDetail() {
   );
 }
 
-export default GroupDetail;
+export default MemberDetail;

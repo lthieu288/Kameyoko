@@ -38,7 +38,7 @@ function Register() {
     };
     async function getPost() {
       await request
-        .post("auth/register", userInfo)
+        .post("api/auth/register", userInfo)
         .then((res) => {
           console.log(res);
           Swal.fire({

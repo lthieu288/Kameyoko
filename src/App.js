@@ -11,29 +11,20 @@ import EditProfile from "./Pages/profile/EditProfile";
 import Register from "./Pages/Register";
 import Login from "./Pages/Login";
 import GroupDetail from "./Pages/GroupDetail";
-import { useAuthState } from "./Context";
+import JoinGroup from "./Pages/JoinGroup";
+import MemberDetail from "./Pages/MemberDetail";
 
 function App() {
-  const userDetails = useAuthState();
   return (
     <>
       <Router>
         <Routes>
-          <Route
-            path="/groups"
-            element={
-              !Boolean(userDetails.token) ? (
-                <Navigate to={"/login"} replace />
-              ) : (
-                <GroupDetail />
-              )
-            }
-          />
-          <Route index element={<ListGroup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route exact path="/" element={<ListGroup />} />
-          <Route exact path="/create-group" element={<CreateGroup />} />
+          <Route path="/" element={<ListGroup />} />
+          <Route path="/create-group" element={<CreateGroup />} />
+          <Route path="/groups/member/:group/:id" element={<MemberDetail />} />
+          <Route exact path="/groups/:id" element={<GroupDetail />} />
           <Route exact path="/profile/:id" element={<EditProfile />} />
           <Route path="*" element={<p>There's nothing here: 404!</p>} />
         </Routes>

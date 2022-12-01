@@ -36,3 +36,16 @@
         display: flex;
         justify-content: end;
       }
+
+.App {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.row{
+  min-width: 1000px;
+}
+
+.pointer{
+  cursor: pointer;
+}
