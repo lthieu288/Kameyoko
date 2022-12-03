@@ -14,7 +14,7 @@ export async function loginUser(dispatch, loginPayload) {
     let data = response;
 
     if (data.status === 200) {
-      localStorage.setItem("currentUser", JSON.stringify(data));
+      localStorage.setItem("currentUser", JSON.stringify(data.data));
       dispatch({ type: "LOGIN_SUCCESS", payload: data.data });
       return data;
     }

@@ -27,12 +27,12 @@ function MemberDetail() {
       await request
         .get("group/" + group + "/general", {
           headers: {
-            Authorization: JSON.parse(localStorage.getItem("currentUser")).data
+            Authorization: JSON.parse(localStorage.getItem("currentUser"))
               .token,
           },
         })
         .then((res) => {
-          console.log(res.data)
+          console.log(res.data);
           setGroupData(res.data);
         })
         .catch((error) => {
@@ -43,7 +43,7 @@ function MemberDetail() {
       await request
         .get("group/" + group + "/details", {
           headers: {
-            Authorization: JSON.parse(localStorage.getItem("currentUser")).data
+            Authorization: JSON.parse(localStorage.getItem("currentUser"))
               .token,
           },
         })

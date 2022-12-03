@@ -23,7 +23,7 @@ function GroupDetail() {
       await request
         .get("group/" + id.id + "/general", {
           headers: {
-            Authorization: JSON.parse(localStorage.getItem("currentUser")).data
+            Authorization: JSON.parse(localStorage.getItem("currentUser"))
               .token,
           },
         })
@@ -38,7 +38,7 @@ function GroupDetail() {
       await request
         .get("group/" + id.id + "/details", {
           headers: {
-            Authorization: JSON.parse(localStorage.getItem("currentUser")).data
+            Authorization: JSON.parse(localStorage.getItem("currentUser"))
               .token,
           },
         })
@@ -51,7 +51,7 @@ function GroupDetail() {
     }
     getGroup();
     getMember();
-  }, [JSON.parse(localStorage.getItem("currentUser")).data.token]);
+  }, [JSON.parse(localStorage.getItem("currentUser")).token]);
 
   if (!groupData) return <p>No Data</p>;
   return (
