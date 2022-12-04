@@ -49,3 +49,7 @@
 .pointer{
   cursor: pointer;
 }
+
+#row-table{
+  border-bottom: none;
+}
