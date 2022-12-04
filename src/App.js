@@ -14,6 +14,7 @@ import GroupDetail from "./Pages/GroupDetail";
 import JoinGroup from "./Pages/JoinGroup";
 import Presentation from "./Pages/Presentation";
 import MemberDetail from "./Pages/MemberDetail";
+import Slide from "./Pages/CreatePresentation";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="/groups/:id" element={<GroupDetail />} />
           <Route path="/presentation" element={<Presentation />} />
+          <Route path="/presentation/:id" element={<Slide />} />
           <Route path="/groups/member/:group/:id" element={<MemberDetail />} />
           <Route path="/profile" element={<EditProfile />} />
           <Route exact path="/" element={<HomePage />} />
