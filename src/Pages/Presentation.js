@@ -28,7 +28,6 @@ import { Modal } from "react-bootstrap";
 import {
   getListPresentation,
   createPresentation,
-  getDetailPresentation,
   deletePresentation,
 } from "../services/PresentationService";
 import Swal from "sweetalert2";
@@ -38,6 +37,7 @@ function Presentation() {
   const userInfo = JSON.parse(localStorage.getItem("currentUser"));
   const [showCreate, setShowCreate] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [render , setRender] = useState(true);
   const [listPresent, setListPresent] = useState([]);
   const [inputRename, setInputRename] = useState("");
   const [inputCreate, setInputCreate] = useState("");
@@ -49,9 +49,10 @@ function Presentation() {
     async function getAPIListPresent() {
       const response = await getListPresentation(userInfo.token);
       setListPresent(response.data.data);
+      setRender(true);
     }
     getAPIListPresent();
-  }, [localStorage.getItem("currentUser"), listPresent]);
+  }, [render]);
 
   const handleCloseCreate = async () => {
     const body = {
@@ -66,7 +67,9 @@ function Presentation() {
         showConfirmButton: false,
         timer: 1000,
       });
+      setRender(false);
     }
+    setRender(false);
     setShowCreate(false);
   };
   const handleCloseEdit = () => {
@@ -98,6 +101,7 @@ function Presentation() {
             showConfirmButton: false,
             timer: 1000,
           });
+          setRender(false);
         } else {
           Swal.fire({
             icon: "error",
@@ -109,6 +113,8 @@ function Presentation() {
       }
     });
   };
+
+  console.log(listPresent)
 
   return (
     <>
@@ -225,6 +231,7 @@ function Presentation() {
                             <ListItemText
                               primary={row.name}
                               secondary={row.protein}
+                              onClick={()=>navigate("/presentation/" + row.id )}
                             />
                           </ListItem>
                         </TableCell>
