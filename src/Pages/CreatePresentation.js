@@ -24,7 +24,7 @@ function CreatePresentation() {
       <Navbar username={userInfo ? userInfo.user.username : null} />
       <div className="App" style={{ backgroundColor: "whitesmoke" }}>
         <div className="container py-5">
-          <div className="d-flex justify-content-between">
+          <div className="d-flex justify-content-between bg-white p-3">
             <button type="button" class="btn btn-outline-primary">
               <KeyboardBackspaceIcon></KeyboardBackspaceIcon>
               Name presentation

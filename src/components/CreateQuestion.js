@@ -19,7 +19,7 @@ function CreateQuestion() {
   return (
     <div
       className="bg-white p-3"
-      style={{ borderRadius: "10px", minHeight: "100vh" }}
+      style={{ borderRadius: "10px", minHeight: "75vh" }}
     >
       <div class="list-group">
         <h6 className="fw-bold mb-3">Slide type</h6>

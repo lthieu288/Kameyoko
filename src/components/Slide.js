@@ -4,7 +4,7 @@ function Slide() {
   return (
     <div
       style={{
-        height: "500px",
+        height: "75vh",
         backgroundColor: "white",
         borderRadius: "10px",
         border: "ridge",
