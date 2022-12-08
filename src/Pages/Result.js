@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Slide from "../components/Slide";
+import Slide2 from "../components/Slide2";
 import { useNavigate, useParams } from "react-router-dom";
 import { getListSlide } from "../services/UserService";
 
@@ -29,7 +29,7 @@ function Result() {
 
   return (
     <div>
-      <Slide token={userInfo.token} id={params.id} />
+      <Slide2 token={userInfo.token} id={params.id} />
     </div>
   );
 }

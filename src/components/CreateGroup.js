@@ -23,7 +23,6 @@ function CreateGroup(props) {
             desc: data.desc
         }
         await createGroup(group, props.token).then((response) => {
-            console.log(response.status)
             if (response.status === 201) {
                 Swal.fire({
                     icon: "success",
