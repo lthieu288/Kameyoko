@@ -29,6 +29,7 @@ import {
   getListPresentation,
   createPresentation,
   deletePresentation,
+  editPresentation,
 } from "../services/PresentationService";
 import Swal from "sweetalert2";
 
@@ -37,10 +38,11 @@ function Presentation() {
   const userInfo = JSON.parse(localStorage.getItem("currentUser"));
   const [showCreate, setShowCreate] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
-  const [render , setRender] = useState(true);
+  const [render, setRender] = useState(true);
   const [listPresent, setListPresent] = useState([]);
   const [inputRename, setInputRename] = useState("");
   const [inputCreate, setInputCreate] = useState("");
+  const [index, setIndex] = useState();
 
   useEffect(() => {
     if (!userInfo) {
@@ -72,16 +74,26 @@ function Presentation() {
     setRender(false);
     setShowCreate(false);
   };
-  const handleCloseEdit = () => {
+  const handleCloseEdit = async () => {
+    const response = await editPresentation(userInfo.token, index, inputRename);
+    if (response.status === 201) {
+      Swal.fire({
+        icon: "success",
+        title: "Register successfully",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+      setRender(false);
+    }
+    setRender(false);
     setShowEdit(false);
-    console.log(inputRename);
   };
   const handleShowEdit = (e) => {
     setShowEdit(true);
+    setIndex(e);
     console.log(e);
   };
   const handleDelete = async (e) => {
-    console.log(e);
     const body = {
       token: userInfo.token,
       id: e,
@@ -113,8 +125,6 @@ function Presentation() {
       }
     });
   };
-
-  console.log(listPresent)
 
   return (
     <>
@@ -226,12 +236,19 @@ function Presentation() {
                         >
                           <ListItem>
                             <ListItemAvatar>
-                              <PlayCircleOutline fontSize="large"></PlayCircleOutline>
+                              <PlayCircleOutline
+                                fontSize="large"
+                                onClick={() => {
+                                  navigate("/result/" + row.id);
+                                }}
+                              ></PlayCircleOutline>
                             </ListItemAvatar>
                             <ListItemText
                               primary={row.name}
                               secondary={row.protein}
-                              onClick={()=>navigate("/presentation/" + row.id )}
+                              onClick={() =>
+                                navigate("/presentation/" + row.id)
+                              }
                             />
                           </ListItem>
                         </TableCell>

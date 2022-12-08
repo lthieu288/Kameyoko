@@ -48,8 +48,23 @@ export async function deletePresentation(body) {
   });
   return response;
 }
+
+export async function editPresentation(token, id, name) {
+  const response = await request.put(
+    "presentation/" + id + "/edit",
+    {
+      name: name,
+    },
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
+  return response;
+}
 export async function getSlidesPresentation(token, id) {
-  const response = await request.get("presentation/" + id +"/slides/get-all", {
+  const response = await request.get("presentation/" + id + "/slides/get-all", {
     headers: {
       Authorization: token,
     },
@@ -57,23 +72,40 @@ export async function getSlidesPresentation(token, id) {
   return response;
 }
 
-export async function createSlides(body,token,id) {
-  console.log("createSlide")
-  console.log(JSON.stringify(body))
-  const response = await fetch('http://localhost:7777/presentation/'+ id +'/slide/create', {
-    method: 'POST',
-    headers: {'Content-type': 'application/json; charset=UTF-8', 'Authorization': token},
-    body: JSON.stringify(body),
-  });
+export async function createSlides(body, token, id) {
+  console.log("createSlide");
+  console.log(JSON.stringify(body));
+  const response = await fetch(
+    "http://localhost:7777/presentation/" + id + "/slide/create",
+    {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: token,
+      },
+      body: JSON.stringify(body),
+    }
+  );
   if (response.status === 201) return response;
   else return response.json();
 }
-export async function updateSlide(body,token,idPre, idSlide,idContent) {
-  const response = await fetch('http://localhost:7777/presentation/'+ idPre +"/slide/" +idSlide+"/edit?content_id="+ idContent, {
-    method: 'PUT',
-    headers: {'Content-type': 'application/json; charset=UTF-8', 'Authorization': token},
-    body: JSON.stringify(body),
-  });
+export async function updateSlide(body, token, idPre, idSlide, idContent) {
+  const response = await fetch(
+    "http://localhost:7777/presentation/" +
+      idPre +
+      "/slide/" +
+      idSlide +
+      "/edit?content_id=" +
+      idContent,
+    {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: token,
+      },
+      body: JSON.stringify(body),
+    }
+  );
   if (response.status === 200) return response;
   else return response.json();
 }
