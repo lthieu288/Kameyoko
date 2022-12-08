@@ -1,4 +1,3 @@
-import React, { useState} from "react";
 import {
     FormControl,
     InputLabel,
@@ -6,13 +5,12 @@ import {
     Select,
     TextField,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Slide from "./Slide";
 import {useForm} from "react-hook-form";
+import React, {useEffect, useState} from "react";
+import Slide from "./Slide";
+import {useNavigate, useParams} from "react-router-dom";
+import { updateSlide} from "../services/PresentationService";
 import Swal from "sweetalert2";
-import {createSlides} from "../services/PresentationService";
-import {useNavigate} from "react-router-dom";
 
 let createSlide = {
     "type": 1, "content": {
@@ -22,44 +20,52 @@ let createSlide = {
     }
 }
 
-function CreateQuestion(props) {
-    const [numberOption, setNumberOption] = useState(3);
-    const navigate = useNavigate();
+function EditQuestion(props) {
+    const [numberOption, setNumberOption] = useState(0);
+    const [listOption, setListOption] = useState([]);
     const userInfo = JSON.parse(localStorage.getItem("currentUser"));
+    const navigate = useNavigate();
+    const {id} = useParams();
+    let [option, setOption] = useState([{
+        "id": 1,
+        "name": "ab"
+    }]);
+
+    useEffect(() => {
+        setNumberOption(props?.options?.length)
+        setListOption(props.options)
+    }, [props.options]);
+
     const {
         register,
         handleSubmit,
         formState: {},
-    } = useForm();
+    } = useForm({});
+
+    for (let i = 0; i < numberOption; i++) {
+        for (let j = 0; j < option.length; j++) {
+            if (listOption[i].id === option[j].id) {
+                listOption[i] = option[j]
+            }
+        }
+    }
     const savePresentation = async (data) => {
-        props.parentCallback(true);
-        props.parentRender(true);
-        let arrayOption = [];
-        if (data.name0 !== undefined)
-            arrayOption.push({"name": data.name0})
-        if (data.name1 !== undefined)
-            arrayOption.push({"name": data.name1})
-        if (data.name2 !== undefined)
-            arrayOption.push({"name": data.name2})
-        if (data.name3 !== undefined)
-            arrayOption.push({"name": data.name3})
-        if (data.name4 !== undefined)
-            arrayOption.push({"name": data.name4})
         let jsonCreateSlide = ({
             "type": 1, "content": {
                 "title": data.title,
-                "meta": "your meta",
-                "options": arrayOption
+                "meta": "slide 6 meta changed",
+                "options": listOption
             }
         })
-        await createSlides(jsonCreateSlide, userInfo.token, props.idSlide).then((response) => {
-            if (response.status === 201) {
+        createSlide = jsonCreateSlide;
+        await updateSlide(jsonCreateSlide, userInfo.token, id, props.id, props.idContent).then((response) => {
+            if (response.status === 200) {
                 Swal.fire({
                     icon: "success",
-                    title: "Create Slide successfully",
+                    title: "Update Slide successfully",
                     showConfirmButton: false,
                 });
-                navigate("/presentation")
+                navigate("/presentation");
             } else {
                 Swal.fire({
                     icon: "error",
@@ -68,11 +74,10 @@ function CreateQuestion(props) {
             }
         });
     }
-
     return (
         <>
             <div className="col-7">
-                <Slide data={createSlide} id={props.id}/>
+                <Slide data={props?.options} id={props.id}/>
             </div>
             <div className="col-3">
                 <form
@@ -98,11 +103,12 @@ function CreateQuestion(props) {
                     <div className="my-3">
                         <h6 className="fw-bold">Question</h6>
                         <TextField
-                            label="Your question"
+                            label={props?.title}
                             variant="outlined"
                             className="form-control"
                             size="medium"
                             {...register("title")}
+
                         />
                     </div>
                     <div className="my-3">
@@ -110,60 +116,29 @@ function CreateQuestion(props) {
                         {new Array(numberOption).fill(0).map((_, index) => (
                             <div key={index} className="d-flex mb-2">
                                 <TextField
-                                    label={"Option " + index}
+                                    label={props?.options?.at(index)?.name}
                                     variant="outlined"
                                     className="form-control"
                                     size="small"
-                                    {...register("name" + index)}
+                                    onChange={e => (setOption([...option, {
+                                        "id": props?.options?.at(index)?.id,
+                                        "name": e.target.value
+                                    }]))}
                                 />
 
-                                <button
-
-                                    style={{border: "none", backgroundColor: "white"}}
-                                    type="button"
-                                    onClick={() => {
-                                        setNumberOption(numberOption - 1);
-                                    }}
-                                >
-                                    <DeleteIcon className=""></DeleteIcon>
-                                </button>
                             </div>
                         ))}
                     </div>
                     <div className="d-grid gap-2">
-                        {
-                            numberOption === 5 ?
-                                <button
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    disabled
-                                >
-                                    <AddIcon></AddIcon>
-                                    Add option
-                                </button>
-
-                                :
-                                <button
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    onClick={() => {
-                                        setNumberOption(numberOption + 1);
-                                    }}
-                                >
-                                    <AddIcon></AddIcon>
-                                    Add option
-                                </button>
-
-                        }
 
                     </div>
                     <div className="d-grid gap-2">
                         <button
                             className="btn btn-secondary"
-                            style={{color: "yellow", marginTop: "30px"}}
+                            style={{color: "red", marginTop: "30px"}}
                             type="submit"
                         >
-                            Create new Slide
+                            Update Slide
                         </button>
                     </div>
                 </form>
@@ -172,4 +147,5 @@ function CreateQuestion(props) {
     );
 }
 
-export default CreateQuestion;
+export default EditQuestion;
+
