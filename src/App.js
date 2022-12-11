@@ -6,7 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import HomePage from "./Pages/Homepage";
-import CreateGroup from "./Pages/homePage/CreateGroup";
+import CreateGroup from "./Pages/CreateGroup";
 import EditProfile from "./Pages/EditProfile";
 import Register from "./Pages/Register";
 import Login from "./Pages/Login";
@@ -27,15 +27,15 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route index element={<HomePage />} />
-          <Route path="/groups/:id" element={<GroupDetail />} />
+          <Route exact path="/" element={<HomePage />} />
+          <Route path="/group/:id" element={<GroupDetail />} />
+
           <Route path="/presentation" element={<Presentation />} />
           <Route path="/presentation/:id" element={<Slide />} />
           <Route path="/view-host" element={<ViewForTheHost />} />
           <Route path="/result/:id" element={<Result />} />
           <Route path="/view-host/:id" element={<ChoiceQuestion />} />
-          <Route path="/groups/member/:group/:id" element={<MemberDetail />} />
           <Route path="/profile" element={<EditProfile />} />
-          <Route exact path="/" element={<HomePage />} />
           <Route exact path="/create-group" element={<CreateGroup />} />
           <Route path="/join-group/:id" element={<JoinGroup />} />
           <Route path="*" element={<p>There's nothing here: 404!</p>} />

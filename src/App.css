@@ -36,14 +36,12 @@
         display: flex;
         justify-content: end;
       }
-
+.bg-color{
+  background-color: #1c2540;
+}
 .App {
   width: 100%;
   min-height: 100vh;
-}
-
-.row{
-  min-width: 1000px;
 }
 
 .pointer{
@@ -63,6 +61,10 @@
   height: 20%;
   border-style: solid;
   border-color: #A9A9A9;
+}
+
+.active{
+  font-weight: bold;
 }
 
 .options {

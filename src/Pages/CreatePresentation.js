@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Footer from "../components/Footer";
-import Navbar from "../components/navbar/Navbar";
+import Navbar from "../components/ResponsiveAppBar";
 import AddIcon from "@mui/icons-material/Add";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { Row } from "react-bootstrap";
@@ -36,7 +36,7 @@ const CreatePresentation = () => {
 
   useEffect(() => {
     if (!userInfo) {
-      navigate("/login?redirect=presentation");
+      navigate("/login?redirect=presentation/" + id);
     }
   }, [userInfo]);
   useEffect(() => {

@@ -6,11 +6,12 @@ import Button from "react-bootstrap/Button";
 import { getProfile, editProfile } from "../services/auth";
 import Swal from "sweetalert2";
 import Footer from "../components/Footer";
-import Navbar from "../components/navbar/Navbar";
+import Navbar from "../components/ResponsiveAppBar";
+import { useNavigate } from "react-router-dom";
 
 function EditProfile() {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-
+  const navigate = useNavigate();
   const [user, setUser] = useState();
   const [image, setImage] = useState();
   const [loading, setLoading] = useState(false);
@@ -42,16 +43,19 @@ function EditProfile() {
   };
 
   function ProfileUser() {
-    getProfile(currentUser.token).then((data) => {
+    getProfile(currentUser?.token).then((data) => {
       setUser(data.user);
       setImage(data.user.profile_img);
       setLoading(false);
     });
   }
   useEffect(() => {
+    if (!localStorage.getItem("currentUser")) {
+      navigate("/login?redirect=profile");
+    }
     setLoading(true);
     ProfileUser();
-  }, [currentUser.token]);
+  }, [currentUser?.token]);
 
   const handleSubmitEditProfile = async (data) => {
     let editUser = {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Footer from "../components/Footer";
 import GroupDetailLeft from "../components/GroupDetailLeft";
 import GroupMemberDetail from "../components/GroupMemberDetail";
-import Navbar from "../components/navbar/Navbar";
+import Navbar from "../components/ResponsiveAppBar";
 import { useAuthState } from "../Context";
 import request from "../utils/request";
 import { useParams, useNavigate } from "react-router-dom";

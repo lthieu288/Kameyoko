@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Footer from "../components/Footer";
-import Navbar from "../components/navbar/Navbar";
+import Navbar from "../components/ResponsiveAppBar";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import {
@@ -129,9 +129,12 @@ function Presentation() {
   return (
     <>
       <Navbar username={userInfo ? userInfo.user.username : null} />
-      <div className="App" style={{ backgroundColor: "whitesmoke" }}>
-        <div className="container py-5">
-          <div className="d-flex justify-content-between">
+      <div className="App gradient-custom-3">
+        <div className="container py-3">
+          <div
+            className="d-flex justify-content-between bg-white p-3"
+            style={{ borderRadius: "10px" }}
+          >
             <button
               type="button"
               class="btn btn-primary"
@@ -142,47 +145,6 @@ function Presentation() {
               <Add></Add>
               New presentation
             </button>
-
-            <Modal
-              show={showCreate}
-              onHide={() => {
-                setShowCreate(false);
-              }}
-            >
-              <Modal.Header closeButton>
-                <Modal.Title>Create new presentation</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <TextField
-                  onChange={(e) => {
-                    setInputCreate(e.target.value);
-                  }}
-                  label="Presentation name"
-                  variant="outlined"
-                  className="form-control"
-                  size="small"
-                />
-              </Modal.Body>
-              <Modal.Footer>
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                  onClick={() => {
-                    setShowCreate(false);
-                  }}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  onClick={handleCloseCreate}
-                >
-                  Create new presentation
-                </button>
-              </Modal.Footer>
-            </Modal>
             <div className="form-outline d-flex">
               <TextField
                 label="Search"
@@ -328,7 +290,47 @@ function Presentation() {
             </Modal>
           </div>
         </div>
-      </div>
+      </div>{" "}
+      <Modal
+        show={showCreate}
+        onHide={() => {
+          setShowCreate(false);
+        }}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Create new presentation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <TextField
+            onChange={(e) => {
+              setInputCreate(e.target.value);
+            }}
+            label="Presentation name"
+            variant="outlined"
+            className="form-control"
+            size="small"
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            onClick={() => {
+              setShowCreate(false);
+            }}
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            onClick={handleCloseCreate}
+          >
+            Create new presentation
+          </button>
+        </Modal.Footer>
+      </Modal>
       <Footer />
     </>
   );

@@ -27,7 +27,6 @@ function Login() {
     };
     try {
       let response = await loginUser(dispatch, payload);
-      console.log(response);
       if (!response) {
         Swal.fire({
           icon: "error",
@@ -38,8 +37,7 @@ function Login() {
         const redirect = decodeURIComponent(query.get("redirect"));
 
         if (redirect) {
-          console.log(redirect);
-          navigate(`/${redirect === null ? "" : redirect}`);
+          navigate(`/${redirect === "null" ? "" : redirect}`);
         } else {
           navigate("/");
         }
@@ -50,7 +48,7 @@ function Login() {
   }
   return (
     <section className="vh-100 bg-image">
-      <div className="mask d-flex align-items-center h-100 gradient-custom-3">
+      <div className="mask d-flex align-items-center h-100 bg-color">
         <div className="container h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col-12 col-md-9 col-lg-7 col-xl-6">
@@ -80,10 +78,10 @@ function Login() {
                         onKeyDown={handleKeyDown}
                       />
                     </div>
-                    <div className="d-flex justify-content-center">
+                    <div className="d-grid gap-2">
                       <button
                         type="button"
-                        className="btn btn-success btn-block btn-lg gradient-custom-4 text-body px-5 fw-bold"
+                        className="btn btn-light btn-lg bg-color text-white px-5 fw-bold"
                         onClick={handleClick}
                       >
                         Sign in

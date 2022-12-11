@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
-import "../../styles/CreateGroup.module.css";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { createGroup } from "../../services/auth";
+import { createGroup } from "../services/auth";
 import * as yup from "yup";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../../components/navbar/Navbar";
-import Footer from "../../components/Footer";
+import Navbar from "../components/ResponsiveAppBar";
+import Footer from "../components/Footer";
 function CreateGroup() {
   const navigate = useNavigate();
 
@@ -20,8 +19,8 @@ function CreateGroup() {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   const schema = yup.object().shape({
-    name: yup.string().required("name group is required"),
-    link: yup.string().required("link group is required"),
+    name: yup.string().required("Name group is required"),
+    link: yup.string().required("Link group is required"),
   });
   const {
     register,
@@ -55,14 +54,18 @@ function CreateGroup() {
   return (
     <>
       <Navbar />
-      <div className="form-create">
+      <div
+        className="form-create gradient-custom-3"
+        style={{ minHeight: "100vh" }}
+      >
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-xl-5 col-md-8">
               <form
                 onSubmit={handleSubmit(create)}
-                className="bg-white  rounded-5 shadow-5-strong p-5"
+                className="bg-white  rounded-5 shadow-5-strong p-5 m-5"
               >
+                <h4 className="text-center mb-3">Create New Group</h4>
                 <div className="form-outline mb-4">
                   <label className="form-label" htmlFor="form1Example1">
                     Name Group
@@ -102,16 +105,17 @@ function CreateGroup() {
                     {...register("desc")}
                   />
                 </div>
-                <button type="submit" className="btn btn-primary btn-block">
-                  Create Group
-                </button>
-                <button
-                  style={{ marginLeft: 10, backgroundColor: "red" }}
-                  className="btn btn-primary btn-block"
-                  onClick={() => navigate("/")}
-                >
-                  Cancel
-                </button>
+                <div className="d-flex justify-content-center">
+                  <button
+                    className="btn btn-secondary mx-3"
+                    onClick={() => navigate("/")}
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn btn-primary btn-block">
+                    Create Group
+                  </button>
+                </div>
               </form>
             </div>
           </div>
