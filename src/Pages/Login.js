@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleIcon from "@mui/icons-material/Google";
 import Swal from "sweetalert2";
+import {GoogleLogin} from 'react-google-login'
 import { loginUser, useAuthDispatch, useAuthState } from "../Context";
-
+import {gapi} from 'gapi-script'
+const clientId = '768128998994-6ltvdfgdgotov36pbbmqmv4apvjfsor5.apps.googleusercontent.com';
 function Login() {
   const dispatch = useAuthDispatch();
   const [email, setEmail] = useState("");
@@ -20,6 +22,21 @@ function Login() {
       sendRequest();
     }
   }
+  const onSuccess = (res) =>{
+    console.log('[Login Success] tokenUser: ', res.tokenId);
+  };
+
+  const onFailure= (res) =>{
+    console.log('[Login Failed] res: ', res);
+  };
+
+  useEffect(()=>{
+    gapi.load("client:auth2",()=>{ 
+      gapi.auth2.init({clientId:clientId})
+    })
+
+  },[])
+
   async function sendRequest() {
     const payload = {
       password: password,
@@ -89,9 +106,15 @@ function Login() {
                     </div>
                     <hr className="my-4" />
                     <div className="form-outline mb-4 d-flex justify-content-center">
-                      <Button variant="outlined" color="error">
-                        <GoogleIcon className="mx-2" /> Continue with Google
-                      </Button>
+                      <GoogleLogin
+                          variant="outlined"
+                          color="error"
+                          clientId={clientId}
+                          onSuccess={onSuccess}
+                          onFailure={onFailure}
+                          cookiePolicy={'single_host_origin'}
+                      >
+                      </GoogleLogin>
                     </div>
                     <div className="d-flex justify-content-center">
                       <p className="mb-0 text-black center text-muted">
