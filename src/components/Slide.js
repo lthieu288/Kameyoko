@@ -13,17 +13,20 @@ function Slide(props) {
         "name": "",
         "data": 0
     }])
-
     useEffect(()=>{
-        let array = []
-        {props?.data?.map((item, i) => (
-            array.push({
-                "name":item.name,
-                "data":item.total_votes
-            })
-        ))}
-        setData(array)
-    },[props?.data])
+        if(props.check)
+            return;
+        else {
+            let array = []
+            props?.data?.map((item, i) => (
+                array.push({
+                    "name": item.name,
+                    "data": item.total_votes
+                })
+            ))
+            setData(array)
+        }
+    },[props.data])
   return (
     <div
       style={{

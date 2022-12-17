@@ -77,7 +77,7 @@ function EditQuestion(props) {
     return (
         <>
             <div className="col-7">
-                <Slide data={props?.options} id={props.id}/>
+                <Slide data={props?.options} id={props.id} check={false}/>
             </div>
             <div className="col-3">
                 <form
