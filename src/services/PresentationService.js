@@ -73,10 +73,8 @@ export async function getSlidesPresentation(token, id) {
 }
 
 export async function createSlides(body, token, id) {
-  console.log("createSlide");
-  console.log(JSON.stringify(body));
   const response = await fetch(
-    "http://localhost:7777/presentation/" + id + "/slide/create",
+    "http://localhost:7777/api/v1/presentation/" + id + "/slide/create",
     {
       method: "POST",
       headers: {
@@ -91,7 +89,7 @@ export async function createSlides(body, token, id) {
 }
 export async function updateSlide(body, token, idPre, idSlide, idContent) {
   const response = await fetch(
-    "http://localhost:7777/presentation/" +
+    "http://localhost:7777/api/v1/presentation/" +
       idPre +
       "/slide/" +
       idSlide +

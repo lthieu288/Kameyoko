@@ -4,7 +4,7 @@ export async function loginUser(dispatch, loginPayload) {
   try {
     dispatch({ type: "REQUEST_LOGIN" });
     let response = await request
-      .post("api/auth/login", loginPayload)
+      .post("auth/login", loginPayload)
       .then((res) => {
         return res;
       })

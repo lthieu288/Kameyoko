@@ -290,7 +290,7 @@ function Presentation() {
             </Modal>
           </div>
         </div>
-      </div>{" "}
+      </div>
       <Modal
         show={showCreate}
         onHide={() => {
