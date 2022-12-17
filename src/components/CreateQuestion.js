@@ -1,19 +1,16 @@
-import React, { useState} from "react";
+import React, {useState} from "react";
 import {
     FormControl,
     InputLabel,
     MenuItem,
     Select,
-    TextField,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
 import Slide from "./Slide";
-import {useForm} from "react-hook-form";
-import Swal from "sweetalert2";
-import {createSlides} from "../services/PresentationService";
-import {useNavigate} from "react-router-dom";
 import CreateMultipleQuestion from "./CreateMultipleQuestion";
+import CreateParagraphQuestion from "./CreateParagraphQuestion";
+import Paragraph from "./Paragraph";
+import Heading from "./Heading";
+import CreateHeadingQuestion from "./CreateHeadingQuestion";
 
 let createSlide = {
     "type": 1, "content": {
@@ -24,7 +21,7 @@ let createSlide = {
 }
 
 function CreateQuestion(props) {
-    const [typeSlide,setTypeSlide] = useState(1)
+    const [typeSlide, setTypeSlide] = useState(1)
 
     const _handleChange = (event) => {
         setTypeSlide(event.target.value)
@@ -34,7 +31,17 @@ function CreateQuestion(props) {
     return (
         <>
             <div className="col-7">
-                <Slide data={createSlide} id={props.id} check={true}/>
+                {
+                    typeSlide === 1 ?
+                        <Slide data={createSlide} id={props.id} check={true}/>
+                        :
+                        typeSlide === 2 ?
+                            <Paragraph paragraph={"hey hey hey"}/>
+                            :
+                            <h2>
+                                <Heading heading={"hey hey hey"}/>
+                            </h2>
+                }
             </div>
             <div className="col-3">
                 <div
@@ -51,15 +58,28 @@ function CreateQuestion(props) {
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 label="Popular question type"
-                                onChange={e =>{_handleChange(e)}}
+                                defaultValue={typeSlide}
+                                onChange={e => {
+                                    _handleChange(e)
+                                }}
                             >
-                                <MenuItem value={1}  >Multiple choice</MenuItem>
+                                <MenuItem value={1}>Multiple choice</MenuItem>
                                 <MenuItem value={2}>Paragraph</MenuItem>
                                 <MenuItem value={3}>Heading</MenuItem>
                             </Select>
                         </FormControl>
                     </div>
-                    <CreateMultipleQuestion idSlide={props.idSlide}/>
+                    {
+                        typeSlide === 1 ?
+                            <CreateMultipleQuestion idSlide={props.idSlide}/>
+                            :
+                            typeSlide === 2 ?
+                                <CreateParagraphQuestion/>
+                                :
+                                <h2>
+                                   <CreateHeadingQuestion/>
+                                </h2>
+                    }
                 </div>
             </div>
         </>
