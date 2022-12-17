@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   BarChart,
   Bar,
@@ -9,6 +9,21 @@ import {
 } from "recharts";
 
 function Slide(props) {
+    const [data , setData] = useState([{
+        "name": "",
+        "data": 0
+    }])
+
+    useEffect(()=>{
+        let array = []
+        {props?.data?.map((item, i) => (
+            array.push({
+                "name":item.name,
+                "data":item.total_votes
+            })
+        ))}
+        setData(array)
+    },[props?.data])
   return (
     <div
       style={{
@@ -23,7 +38,7 @@ function Slide(props) {
         {props.data ? (
           <BarChart
             style={{ marginTop: "40px" }}
-            data={props.data}
+            data={data}
             margin={{
               top: 5,
               right: 30,
