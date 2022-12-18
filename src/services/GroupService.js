@@ -74,3 +74,44 @@ export async function joinGroup(token, userId, groupId) {
     });
   return response;
 }
+
+export async function sendEmail(token, groupId, email, link) {
+  const response = await request
+    .post(
+      "/group/" + groupId + "/invite-member",
+      {
+        email: email,
+        link: link,
+      },
+      {
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          Authorization: token,
+        },
+      }
+    )
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      return error;
+    });
+  return response;
+}
+
+export async function kickOff(token, groupId, userId) {
+  const response = await request
+    .delete("/group/" + groupId + "/delete-member", {
+      headers: {
+        Authorization: token,
+      },
+      data: { user_id: userId },
+    })
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      return error;
+    });
+  return response;
+}

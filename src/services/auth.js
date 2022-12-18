@@ -14,19 +14,18 @@ export const register = async (userInfo) => {
 };
 
 export async function createGroup(body, token) {
-  const response = await fetch(
-    "http://localhost:7777/api/v1/accounts/create-group",
+  const response = await request.post(
+    "accounts/create-group",
+    { name: body },
     {
-      method: "POST",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
         Authorization: token,
       },
     }
-  ).then((res) => {
-    return res;
-  });
-  return response;
+  );
+  if (response.status === 201) return response;
+  else return response.json();
 }
 
 export async function getProfile(token) {

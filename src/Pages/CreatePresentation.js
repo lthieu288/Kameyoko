@@ -47,7 +47,7 @@ const CreatePresentation = () => {
         setSlides([]);
         setIdSlide(undefined);
       }
-      if (response.data.slides.length > 0) {
+      if (response.data.slides?.length > 0) {
         setIdSlide(response.data.slides[0].id);
         setListOption(response.data.slides[0]?.content?.options);
         setTitle(response.data.slides[0]?.content?.title);
