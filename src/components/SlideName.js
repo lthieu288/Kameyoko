@@ -12,7 +12,7 @@ function SlideName() {
             <div className="d-grid gap-2">
                 <Card.Img
                     variant="top"
-                    src="https://i1-thethao.vnecdn.net/2022/11/20/ronaldo-messi-jpeg-2695-1668938162.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=Lv4T90hu_MaLuArTfZH4sA"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Blue_question_mark_icon.svg/1200px-Blue_question_mark_icon.svg.png?fbclid=IwAR2XnW1C-TVMsohYMOmiErIFBGufYe9OcON9SOLcrPRs2TyWBGB5Kvr_u1k"
                     style={{
                         width: "100%",
                         height: "8rem",

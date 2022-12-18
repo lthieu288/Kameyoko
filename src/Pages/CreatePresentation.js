@@ -12,6 +12,7 @@ import EditQuestion from "../components/EditQuestion";
 
 const CreatePresentation = () => {
   const [disable, setDisable] = useState(false);
+  const [render, setRender] = useState(false);
   const navigate = useNavigate();
   const userInfo = JSON.parse(localStorage.getItem("currentUser"));
   const { id } = useParams();
@@ -31,9 +32,8 @@ const CreatePresentation = () => {
     setDisable(false);
   };
   const callbackFunctionRender = () => {
-    setDisable(false);
+    setRender(true);
   };
-
   useEffect(() => {
     if (!userInfo) {
       navigate("/login?redirect=presentation/" + id);
@@ -41,6 +41,7 @@ const CreatePresentation = () => {
   }, [userInfo]);
   useEffect(() => {
     async function getAPIListPresent() {
+      setDisable(false);
       const response = await getSlidesPresentation(userInfo.token, id);
       if (response.data.slides !== null) setSlides(response.data.slides);
       else if (response.data.slides === null) {
@@ -56,7 +57,9 @@ const CreatePresentation = () => {
     }
 
     getAPIListPresent();
-  }, []);
+    setRender(false)
+
+  }, [render]);
 
   return (
     <>
@@ -125,8 +128,10 @@ const CreatePresentation = () => {
                 <EditQuestion
                   idContent={idContent}
                   id={idSlide}
+                  render={render}
                   title={title}
                   options={listOption}
+                  parentRender={callbackFunctionRender}
                   parentCallback={callbackFunction}
                 />
               )}

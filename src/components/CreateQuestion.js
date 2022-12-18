@@ -6,13 +6,7 @@ import {
     Select,
     TextField,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
 import Slide from "./Slide";
-import {useForm} from "react-hook-form";
-import Swal from "sweetalert2";
-import {createSlides} from "../services/PresentationService";
-import {useNavigate} from "react-router-dom";
 import CreateMultipleQuestion from "./CreateMultipleQuestion";
 
 let createSlide = {
@@ -25,7 +19,9 @@ let createSlide = {
 
 function CreateQuestion(props) {
     const [typeSlide,setTypeSlide] = useState(1)
-
+    const callFunctionRender = () => {
+        props.parentRender(true);
+    };
     const _handleChange = (event) => {
         setTypeSlide(event.target.value)
         console.log("CreateQuestion")
@@ -59,7 +55,7 @@ function CreateQuestion(props) {
                             </Select>
                         </FormControl>
                     </div>
-                    <CreateMultipleQuestion idSlide={props.idSlide}/>
+                    <CreateMultipleQuestion idSlide={props.idSlide}  parentRender={callFunctionRender} />
                 </div>
             </div>
         </>
