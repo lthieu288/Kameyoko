@@ -198,12 +198,7 @@ function Presentation() {
                         >
                           <ListItem>
                             <ListItemAvatar>
-                              <PlayCircleOutline
-                                fontSize="large"
-                                onClick={() => {
-                                  navigate("/result/" + row.id);
-                                }}
-                              ></PlayCircleOutline>
+                              <PlayCircleOutline fontSize="large"></PlayCircleOutline>
                             </ListItemAvatar>
                             <ListItemText
                               primary={row.name}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Footer from "../components/Footer";
+import { Dropdown } from "react-bootstrap";
 import {
   TableBody,
   TableCell,
@@ -11,9 +12,11 @@ import {
   ListItem,
   ListItemText,
   ListItemAvatar,
+  TextField,
+  InputAdornment,
 } from "@mui/material";
 import Swal from "sweetalert2";
-import { AccountCircle, Edit } from "@mui/icons-material";
+import { AccountCircle, MoreHoriz, GroupAdd } from "@mui/icons-material";
 import { format } from "date-fns";
 import Navbar from "../components/ResponsiveAppBar";
 import { useParams, useNavigate } from "react-router-dom";
@@ -21,6 +24,8 @@ import {
   getDetailGroup,
   getListMember,
   assignRole,
+  sendEmail,
+  kickOff,
 } from "../services/GroupService";
 
 function GroupDetail() {
@@ -28,8 +33,11 @@ function GroupDetail() {
   const [groupData, setGroupData] = useState();
   const [member, setMember] = useState(null);
   const [render, setRender] = useState(false);
+  const [email, setEmail] = useState("");
   const id = useParams();
+  const host = "http://localhost:3000";
   const userInfo = JSON.parse(localStorage.getItem("currentUser"));
+  const [link, setLink] = useState(host);
 
   useEffect(() => {
     if (!localStorage.getItem("currentUser")) {
@@ -37,11 +45,45 @@ function GroupDetail() {
     }
     getDetailGroup(userInfo?.token, id?.id).then((res) => {
       setGroupData(res.group_data);
+      setLink(host + "/join-group/" + res.group_data?.id);
     });
     getListMember(userInfo?.token, id?.id).then((res) => {
       setMember(res.groups_data);
     });
   }, [render]);
+
+  function isValidEmail(email) {
+    return /\S+@\S+\.\S+/.test(email);
+  }
+  const handleSendEmail = () => {
+    if (!isValidEmail(email)) {
+      Swal.fire({
+        icon: "error",
+        title: "Email is invalid",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+    } else {
+      sendEmail(userInfo?.token, id?.id, email, link).then((res) => {
+        if (res.status === 201) {
+          Swal.fire({
+            icon: "success",
+            title: res.data.message,
+            showConfirmButton: false,
+            timer: 1000,
+          });
+          setEmail("");
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Fail to send email",
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        }
+      });
+    }
+  };
 
   const handleShowEdit = (e) => {
     if (userInfo.user.id === groupData.owner.id) {
@@ -90,6 +132,50 @@ function GroupDetail() {
       });
     }
   };
+
+  const handleKickOff = (row) => {
+    if (userInfo.user.id === groupData.owner.id) {
+      Swal.fire({
+        title: "Delete " + row.user_id.username + " this group?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Delete",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          if (row.role !== "owner") {
+            kickOff(userInfo.token, id.id, row.user_id.id).then((res) => {
+              if (res.status === 200) {
+                Swal.fire({
+                  icon: "success",
+                  title: "Delete successfully",
+                  showConfirmButton: false,
+                  timer: 1000,
+                });
+                setRender(!render);
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Can't delete role",
+                  showConfirmButton: false,
+                  timer: 1000,
+                });
+              }
+            });
+          } else {
+            Swal.fire({
+              icon: "info",
+              title: "Can't delete owner group",
+            });
+          }
+        }
+      });
+    } else {
+      Swal.fire({
+        icon: "info",
+        title: "You don't have permission",
+      });
+    }
+  };
   return (
     <>
       <Navbar username={userInfo?.user ? userInfo.user.username : null} />
@@ -109,10 +195,33 @@ function GroupDetail() {
                     alt="Cinque Terre"
                   />
                 </div>
-                <h4 className="text-center my-3">name</h4>
+                <h4 className="text-center my-3">{groupData?.name}</h4>
                 <hr />
-                <input type="text" class="form-control" value="link"></input>
+                <TextField
+                  value={link}
+                  label="Join group via link"
+                  type="text"
+                  className="form-control form-control-lg"
+                />
                 <hr />
+                <TextField
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="abc@gmail.com"
+                  label="Invite via email"
+                  type="email"
+                  fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="start">
+                        <GroupAdd
+                          style={{ cursor: "pointer" }}
+                          onClick={handleSendEmail}
+                        />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
               </div>
               <TableContainer
                 className="col-9 mx-3"
@@ -162,14 +271,23 @@ function GroupDetail() {
                             {format(new Date(row?.joined_at), "dd/MM/yyyy")}
                           </TableCell>
                           <TableCell align="center" id="row-table">
-                            <button
-                              type="button"
-                              class="btn "
-                              onClick={() => handleShowEdit(row)}
-                              title="Edit presentation"
-                            >
-                              <Edit></Edit>
-                            </button>
+                            <Dropdown>
+                              <Dropdown.Toggle variant="light">
+                                <MoreHoriz></MoreHoriz>
+                              </Dropdown.Toggle>
+                              <Dropdown.Menu>
+                                <Dropdown.Item
+                                  onClick={() => handleShowEdit(row)}
+                                >
+                                  Assign role
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={() => handleKickOff(row)}
+                                >
+                                  Kick off
+                                </Dropdown.Item>
+                              </Dropdown.Menu>
+                            </Dropdown>
                           </TableCell>
                         </TableRow>
                       ))
