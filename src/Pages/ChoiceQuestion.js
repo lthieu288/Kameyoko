@@ -14,11 +14,16 @@ export default function ChoiceQuestion() {
   const [optionChecked, setOptionChecked] = useState();
   const [payload, setPayload] = useState([]);
   const params = useParams();
+  const socket = new WebSocket("ws://localhost:7777/ws");
 
   useEffect(() => {
-    if (!userInfo) {
-      navigate("/login?redirect=view-host/" + params.id);
-    }
+    socket.onopen = function () {
+      socket.send("Greetings from frontend!");
+      socket.onmessage = (msg) => {
+        console.log(msg);
+        console.log("we got msg..");
+      };
+    };
     async function getAPIListSlide() {
       const response = await getListSlide(userInfo.token, params.id).then(
         (res) => {
@@ -38,6 +43,7 @@ export default function ChoiceQuestion() {
       option: optionChecked,
       content: slide.content.id,
     };
+    socket.send(obj);
     async function postApiVote() {
       const response = await postVote(
         userInfo.token,
