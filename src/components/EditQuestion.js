@@ -8,7 +8,7 @@ import {
 import {useForm} from "react-hook-form";
 import React, {useEffect, useState} from "react";
 import Slide from "./Slide";
-import {useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import { updateSlide} from "../services/PresentationService";
 import Swal from "sweetalert2";
 
@@ -22,22 +22,22 @@ let createSlide = {
 
 function EditQuestion(props) {
     const [numberOption, setNumberOption] = useState(0);
+    const [title, setTitle] = useState("");
+
     const [listOption, setListOption] = useState([]);
     const userInfo = JSON.parse(localStorage.getItem("currentUser"));
-    const navigate = useNavigate();
     const {id} = useParams();
     let [option, setOption] = useState([{
         "id": 1,
         "name": "ab"
     }]);
-
     useEffect(() => {
         setNumberOption(props?.options?.length)
+        setTitle(props?.title)
         setListOption(props.options)
-    }, [props.options]);
+    }, [props.options,props.render]);
 
     const {
-        register,
         handleSubmit,
         formState: {},
     } = useForm({});
@@ -52,7 +52,7 @@ function EditQuestion(props) {
     const savePresentation = async (data) => {
         let jsonCreateSlide = ({
             "type": 1, "content": {
-                "title": data.title,
+                "title": title,
                 "meta": "slide 6 meta changed",
                 "options": listOption
             }
@@ -65,7 +65,9 @@ function EditQuestion(props) {
                     title: "Update Slide successfully",
                     showConfirmButton: false,
                 });
-                navigate("/presentation");
+                setOption([])
+                setListOption([])
+                props.parentRender(true);
             } else {
                 Swal.fire({
                     icon: "error",
@@ -103,29 +105,26 @@ function EditQuestion(props) {
                     <div className="my-3">
                         <h6 className="fw-bold">Question</h6>
                         <TextField
-                            label={props?.title}
+                            value={title}
                             variant="outlined"
                             className="form-control"
                             size="medium"
-                            {...register("title")}
-
+                            onChange={e => (setTitle(e.target.value))}
                         />
                     </div>
                     <div className="my-3">
                         <h6 className="fw-bold">Options</h6>
-                        {new Array(numberOption).fill(0).map((_, index) => (
+                        {props.options?.map((value, index ) => (
                             <div key={index} className="d-flex mb-2">
-                                <TextField
-                                    label={props?.options?.at(index)?.name}
-                                    variant="outlined"
+                                <input
                                     className="form-control"
                                     size="small"
+                                    value={props.options?.at(index).name}
                                     onChange={e => (setOption([...option, {
                                         "id": props?.options?.at(index)?.id,
                                         "name": e.target.value
                                     }]))}
                                 />
-
                             </div>
                         ))}
                     </div>
