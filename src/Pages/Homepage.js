@@ -25,13 +25,14 @@ function Homepage() {
       navigate("/login?redirect=");
     }
     getGroups(user?.token).then((data) => {
+      console.log(data);
       setGroupOwner([]);
       setGroupJoin([]);
       setGroupRender([]);
       let obj = null;
       let owner = [];
       let join = [];
-      for (var i = 0; i < data.groups_data.length; i++) {
+      for (var i = 0; i < data.groups_data?.length; i++) {
         obj = data.groups_data[i];
         if (data.groups_data[i].role === "owner") {
           owner.push(obj);

@@ -14,18 +14,18 @@ export const register = async (userInfo) => {
 };
 
 export async function createGroup(body, token) {
-    const response = await request.post(
-        "accounts/create-group",
-        { name: body },
-        {
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                Authorization: token,
-            },
-        }
-    );
-    if (response.status === 201) return response;
-    else return response.json();
+  const response = await request.post(
+    "accounts/create-group",
+    { name: body },
+    {
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: token,
+      },
+    }
+  );
+  if (response.status === 201) return response;
+  else return response.json();
 }
 
 export async function getProfile(token) {

@@ -21,8 +21,10 @@ let createSlide = {
 }
 
 function CreateQuestion(props) {
-    const [typeSlide, setTypeSlide] = useState(1)
-
+    const [typeSlide,setTypeSlide] = useState(1)
+    const callFunctionRender = () => {
+        props.parentRender(true);
+    };
     const _handleChange = (event) => {
         setTypeSlide(event.target.value)
         console.log("CreateQuestion")
@@ -71,7 +73,7 @@ function CreateQuestion(props) {
                     </div>
                     {
                         typeSlide === 1 ?
-                            <CreateMultipleQuestion idSlide={props.idSlide}/>
+                            <CreateMultipleQuestion idSlide={props.idSlide} parentRender={callFunctionRender}/>
                             :
                             typeSlide === 2 ?
                                 <CreateParagraphQuestion/>
