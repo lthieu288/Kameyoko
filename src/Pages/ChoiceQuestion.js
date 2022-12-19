@@ -14,7 +14,6 @@ export default function ChoiceQuestion() {
   const [optionChecked, setOptionChecked] = useState();
   const [payload, setPayload] = useState([]);
   const params = useParams();
-  const socket = new WebSocket("ws://localhost:7777/ws");
 
   useEffect(() => {
     async function getAPIListSlide() {
@@ -28,13 +27,6 @@ export default function ChoiceQuestion() {
     }
 
     getAPIListSlide();
-    socket.onopen = function () {
-      socket.send(JSON.stringify(slide.id.toString()));
-      socket.onmessage = (msg) => {
-        console.log(msg);
-        console.log("we got msg..");
-      };
-    };
     // setSlide(array[0]);
   }, [render]);
 
@@ -44,7 +36,15 @@ export default function ChoiceQuestion() {
       option: optionChecked.toString(),
       content: slide.content.id.toString(),
     };
-    socket.send(JSON.stringify(obj));
+    const socket = new WebSocket(`ws://localhost:7777/ws?roomId=${slide.id.toString()}`);
+    socket.onopen = function (event) {
+      socket.send(JSON.stringify(slide.id.toString()));
+      socket.send(JSON.stringify(obj));
+      socket.onmessage = (msg) => {
+        console.log("we got msg..");
+        console.log(msg);
+      };
+    };
     async function postApiVote() {
       const response = await postVote(
         userInfo.token,
