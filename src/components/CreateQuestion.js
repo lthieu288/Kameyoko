@@ -27,8 +27,6 @@ function CreateQuestion(props) {
     };
     const _handleChange = (event) => {
         setTypeSlide(event.target.value)
-        console.log("CreateQuestion")
-        console.log(event.target.value)
     }
     return (
         <>
@@ -37,7 +35,7 @@ function CreateQuestion(props) {
                     typeSlide === 1 ?
                         <Slide data={createSlide} id={props.id} check={true}/>
                         :
-                        typeSlide === 2 ?
+                        typeSlide === 9 ?
                             <Paragraph paragraph={"hey hey hey"}/>
                             :
                             <h2>
@@ -60,14 +58,14 @@ function CreateQuestion(props) {
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 label="Popular question type"
-                                defaultValue={typeSlide}
+                                value={typeSlide ? typeSlide : ""}
                                 onChange={e => {
                                     _handleChange(e)
                                 }}
                             >
                                 <MenuItem value={1}>Multiple choice</MenuItem>
-                                <MenuItem value={2}>Paragraph</MenuItem>
-                                <MenuItem value={3}>Heading</MenuItem>
+                                <MenuItem value={9}>Paragraph</MenuItem>
+                                <MenuItem value={8}>Heading</MenuItem>
                             </Select>
                         </FormControl>
                     </div>
@@ -75,11 +73,11 @@ function CreateQuestion(props) {
                         typeSlide === 1 ?
                             <CreateMultipleQuestion idSlide={props.idSlide} parentRender={callFunctionRender}/>
                             :
-                            typeSlide === 2 ?
-                                <CreateParagraphQuestion/>
+                            typeSlide === 9 ?
+                                <CreateParagraphQuestion idSlide={props.idSlide} parentRender={callFunctionRender}/>
                                 :
                                 <h2>
-                                   <CreateHeadingQuestion/>
+                                   <CreateHeadingQuestion idSlide={props.idSlide} parentRender={callFunctionRender}/>
                                 </h2>
                     }
                 </div>
