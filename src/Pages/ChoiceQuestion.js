@@ -17,13 +17,6 @@ export default function ChoiceQuestion() {
   const socket = new WebSocket("ws://localhost:7777/ws");
 
   useEffect(() => {
-    socket.onopen = function () {
-      socket.send("Greetings from frontend!");
-      socket.onmessage = (msg) => {
-        console.log(msg);
-        console.log("we got msg..");
-      };
-    };
     async function getAPIListSlide() {
       const response = await getListSlide(userInfo.token, params.id).then(
         (res) => {
@@ -33,17 +26,25 @@ export default function ChoiceQuestion() {
       );
       return response;
     }
+
     getAPIListSlide();
+    socket.onopen = function () {
+      socket.send(JSON.stringify(slide.id.toString()));
+      socket.onmessage = (msg) => {
+        console.log(msg);
+        console.log("we got msg..");
+      };
+    };
     // setSlide(array[0]);
   }, [render]);
 
   const handleClick = () => {
     const obj = {
-      id: params.id,
-      option: optionChecked,
-      content: slide.content.id,
+      id: params.id.toString(),
+      option: optionChecked.toString(),
+      content: slide.content.id.toString(),
     };
-    socket.send(obj);
+    socket.send(JSON.stringify(obj));
     async function postApiVote() {
       const response = await postVote(
         userInfo.token,
