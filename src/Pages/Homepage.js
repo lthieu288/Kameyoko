@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Modal, Card } from "react-bootstrap";
-import { Groups, Person, Add } from "@mui/icons-material";
-import { TextField } from "@mui/material";
+import { Groups, Person, Add, HighlightOff } from "@mui/icons-material";
+import { TextField, Tooltip } from "@mui/material";
 import { getGroups } from "../services/auth";
 import Footer from "../components/Footer";
 import Navbar from "../components/ResponsiveAppBar";
@@ -61,6 +61,34 @@ function Homepage() {
           icon: "error",
           title: response.message,
         });
+      }
+    });
+  };
+  const handleDelete = (e) => {
+    Swal.fire({
+      title: "Do you want to delete this group?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Delete",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        console.log(e);
+        if (e.role === "owner") {
+          Swal.fire({
+            icon: "success",
+            title: "Delete successfully",
+            showConfirmButton: false,
+            timer: 1000,
+          });
+          setRender(false);
+        } else {
+          Swal.fire({
+            icon: "info",
+            title: "You don't have permission",
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        }
       }
     });
   };
@@ -135,6 +163,19 @@ function Homepage() {
                             margin: 0,
                           }}
                         >
+                          <Card.Header>
+                            <div className="d-flex justify-content-between">
+                              Group
+                              <Tooltip title="Delete">
+                                <HighlightOff
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => {
+                                    handleDelete(row);
+                                  }}
+                                ></HighlightOff>
+                              </Tooltip>
+                            </div>
+                          </Card.Header>
                           <Link to={`/group/${row.group.id}`}>
                             <Card.Img
                               variant="top"
@@ -148,11 +189,13 @@ function Homepage() {
                             />
                           </Link>
                           <Card.Footer>
-                            <div
-                              className="name-group"
-                              style={{ cursor: "pointer" }}
-                            >
-                              {row?.group.name}
+                            <div class="d-grid gap-2">
+                              <button
+                                class="btn btn-outline-primary fw-bold"
+                                type="button"
+                              >
+                                {row?.group.name}
+                              </button>
                             </div>
                           </Card.Footer>
                         </Card>

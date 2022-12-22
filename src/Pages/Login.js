@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
-import GoogleIcon from "@mui/icons-material/Google";
+import { Modal } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { GoogleLogin } from "react-google-login";
-import { loginUser, useAuthDispatch, useAuthState } from "../Context";
+import { loginUser, useAuthDispatch } from "../Context";
 import { gapi } from "gapi-script";
 const clientId =
   "768128998994-6ltvdfgdgotov36pbbmqmv4apvjfsor5.apps.googleusercontent.com";
 function Login() {
   const dispatch = useAuthDispatch();
   const [email, setEmail] = useState("");
+  const [showPopUp, setShowPopUp] = useState(false);
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
@@ -40,7 +41,7 @@ function Login() {
   async function sendRequest() {
     const payload = {
       password: password,
-      email: email,
+      email: username,
     };
     try {
       let response = await loginUser(dispatch, payload);
@@ -63,6 +64,19 @@ function Login() {
       console.log(error);
     }
   }
+  function isValidEmail(email) {
+    return /\S+@\S+\.\S+/.test(email);
+  }
+  const handleResetPassword = () => {
+    if (!isValidEmail(email)) {
+      Swal.fire({
+        icon: "error",
+        title: "Email is invalid",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+    }
+  };
   return (
     <section className="vh-100 bg-image">
       <div className="mask d-flex align-items-center h-100 bg-color">
@@ -77,8 +91,8 @@ function Login() {
                     </h2>
                     <div className="form-outline mb-4">
                       <TextField
-                        onChange={(e) => setEmail(e.target.value)}
-                        value={email}
+                        onChange={(e) => setUsername(e.target.value)}
+                        value={username}
                         label="Email"
                         type="email"
                         className="form-control form-control-lg"
@@ -117,6 +131,19 @@ function Login() {
                     </div>
                     <div className="d-flex justify-content-center">
                       <p className="mb-0 text-black center text-muted">
+                        You forgot password?
+                        <Link
+                          className="fw-bold text-body"
+                          style={{ marginLeft: "10px" }}
+                          onClick={() => setShowPopUp(true)}
+                        >
+                          Reset password
+                        </Link>
+                      </p>
+                    </div>
+                    <hr />
+                    <div className="d-flex justify-content-center">
+                      <p className="mb-0 text-black center text-muted">
                         Don't have an account?{" "}
                         <Link to="/register" className="fw-bold text-body">
                           Sign Up
@@ -130,6 +157,46 @@ function Login() {
           </div>
         </div>
       </div>
+      <Modal
+        show={showPopUp}
+        onHide={() => {
+          setShowPopUp(false);
+        }}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Reset your password</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <TextField
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+            label="Enter your email"
+            variant="outlined"
+            className="form-control"
+            size="small"
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            onClick={() => {
+              setShowPopUp(false);
+            }}
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            onClick={handleResetPassword}
+          >
+            Reset password
+          </button>
+        </Modal.Footer>
+      </Modal>
     </section>
   );
 }
