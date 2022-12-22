@@ -1,13 +1,16 @@
-import React, { useState} from "react";
+import React, {useState} from "react";
 import {
     FormControl,
     InputLabel,
     MenuItem,
     Select,
-    TextField,
 } from "@mui/material";
 import Slide from "./Slide";
 import CreateMultipleQuestion from "./CreateMultipleQuestion";
+import CreateParagraphQuestion from "./CreateParagraphQuestion";
+import Paragraph from "./Paragraph";
+import Heading from "./Heading";
+import CreateHeadingQuestion from "./CreateHeadingQuestion";
 
 let createSlide = {
     "type": 1, "content": {
@@ -24,13 +27,21 @@ function CreateQuestion(props) {
     };
     const _handleChange = (event) => {
         setTypeSlide(event.target.value)
-        console.log("CreateQuestion")
-        console.log(event.target.value)
     }
     return (
         <>
             <div className="col-7">
-                <Slide data={createSlide} id={props.id} check={true}/>
+                {
+                    typeSlide === 1 ?
+                        <Slide data={createSlide} id={props.id} check={true}/>
+                        :
+                        typeSlide === 9 ?
+                            <Paragraph paragraph={"hey hey hey"}/>
+                            :
+                            <h2>
+                                <Heading heading={"hey hey hey"}/>
+                            </h2>
+                }
             </div>
             <div className="col-3">
                 <div
@@ -47,15 +58,28 @@ function CreateQuestion(props) {
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 label="Popular question type"
-                                onChange={e =>{_handleChange(e)}}
+                                value={typeSlide ? typeSlide : ""}
+                                onChange={e => {
+                                    _handleChange(e)
+                                }}
                             >
-                                <MenuItem value={1}  >Multiple choice</MenuItem>
-                                <MenuItem value={2}>Paragraph</MenuItem>
-                                <MenuItem value={3}>Heading</MenuItem>
+                                <MenuItem value={1}>Multiple choice</MenuItem>
+                                <MenuItem value={9}>Paragraph</MenuItem>
+                                <MenuItem value={8}>Heading</MenuItem>
                             </Select>
                         </FormControl>
                     </div>
-                    <CreateMultipleQuestion idSlide={props.idSlide}  parentRender={callFunctionRender} />
+                    {
+                        typeSlide === 1 ?
+                            <CreateMultipleQuestion idSlide={props.idSlide} parentRender={callFunctionRender}/>
+                            :
+                            typeSlide === 9 ?
+                                <CreateParagraphQuestion idSlide={props.idSlide} parentRender={callFunctionRender}/>
+                                :
+                                <h2>
+                                   <CreateHeadingQuestion idSlide={props.idSlide} parentRender={callFunctionRender}/>
+                                </h2>
+                    }
                 </div>
             </div>
         </>

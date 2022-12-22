@@ -7,7 +7,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import {useForm} from "react-hook-form";
 import Swal from "sweetalert2";
 import {createSlides} from "../services/PresentationService";
-import {useNavigate} from "react-router-dom";
 
 function CreateMultipleQuestion(props) {
     const [numberOption, setNumberOption] = useState(3);
