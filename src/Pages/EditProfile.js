@@ -3,11 +3,13 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "react-bootstrap/Button";
-import { getProfile, editProfile } from "../services/auth";
+import {getProfile, editProfile, editPassword} from "../services/auth";
 import Swal from "sweetalert2";
 import Footer from "../components/Footer";
 import Navbar from "../components/ResponsiveAppBar";
 import { useNavigate } from "react-router-dom";
+import {Modal} from "react-bootstrap";
+import {TextField} from "@mui/material";
 
 function EditProfile() {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -15,6 +17,10 @@ function EditProfile() {
   const [user, setUser] = useState();
   const [image, setImage] = useState();
   const [loading, setLoading] = useState(false);
+  const [showCreate, setShowCreate] = useState(false);
+  const [oldPassword,setOldPassword] = useState("")
+  const [newPassword,setNewPassword] = useState("")
+  const [replacePass,setReplacePass] = useState("")
 
   const schema = yup.object().shape({
     username: yup.string().required("user name is required"),
@@ -81,6 +87,41 @@ function EditProfile() {
       }
     });
   };
+  const changePassword = async ()=>{
+    let changePass = {
+      old_password: oldPassword,
+      new_password: newPassword
+    };
+    if(replacePass !== newPassword){
+      Swal.fire({
+        icon: "error",
+        title: "",
+        text: "Passwords Don't Match ( oldPassword and newPassword )",
+      }).then(r => {});
+    }else {
+      editPassword(currentUser.token, changePass).then((response) => {
+        if (response.status === 200) {
+          Swal.fire({
+            icon: "success",
+            title: "Change password successfully",
+            showConfirmButton: false,
+            timer: 1000,
+          });
+          setShowCreate(false);
+          setOldPassword("")
+          setNewPassword("")
+          setReplacePass("")
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: response.message,
+            text: "Check Old Password, please",
+          });
+        }
+      });
+    }
+
+  }
   if (loading) return <p> Loading </p>;
   if (!user) return <p>No User</p>;
   return (
@@ -183,6 +224,16 @@ function EditProfile() {
                     <Button variant="outline-primary" type="submit" style={{}}>
                       Save
                     </Button>
+                    <Button
+                        variant="outline-primary"
+                        type="submit"
+                        style={{ marginLeft:"30px", backgroundColor:"red" , color:"black"}}
+                        onClick={() => {
+                          setShowCreate(true);
+                        }}
+                    >
+                      Change Password
+                    </Button>
                   </form>
                 </div>
               </div>
@@ -191,6 +242,74 @@ function EditProfile() {
         </div>
       </div>
       <Footer />
+      <Modal
+          show={showCreate}
+          onHide={() => {
+            setShowCreate(false);
+            setOldPassword("")
+            setNewPassword("")
+            setReplacePass("")
+          }}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Change Password</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <TextField
+              label="Old Password"
+              type="password"
+              variant="outlined"
+              className="form-control"
+              size="small"
+              value={oldPassword}
+              onChange={(e)=>setOldPassword(e.target.value)}
+          />
+          <TextField
+              label="New Password"
+              type="password"
+              variant="outlined"
+              className="form-control"
+              size="small"
+              value={newPassword}
+              style={{marginTop:"20px"}}
+              onChange={(e)=>setNewPassword(e.target.value)}
+
+          />
+          <TextField
+              label="Replace Password"
+              type="password"
+              variant="outlined"
+              className="form-control"
+              size="small"
+              value={replacePass}
+              style={{marginTop:"20px"}}
+              onChange={(e)=>setReplacePass(e.target.value)}
+
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <button
+              type="button"
+              className="btn btn-secondary"
+              data-bs-dismiss="modal"
+              onClick={() => {
+                setShowCreate(false);
+                setOldPassword("")
+                setNewPassword("")
+                setReplacePass("")
+              }}
+          >
+            Cancel
+          </button>
+          <button
+              type="button"
+              className="btn btn-primary"
+              onClick={changePassword}
+          >
+            save
+          </button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

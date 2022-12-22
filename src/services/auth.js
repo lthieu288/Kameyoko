@@ -54,6 +54,19 @@ export async function editProfile(token, userEdit) {
   else return response.json();
 }
 
+export async function editPassword(token, body) {
+    const response = await fetch("http://localhost:7777/api/v1/accounts/change-password", {
+        method: "PUT",
+        headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            Authorization: token,
+        },
+        body: JSON.stringify(body),
+    });
+    if (response.status === 200) return response;
+    else return response.json();
+}
+
 export async function getGroups(token) {
   const response = await fetch(
     "http://localhost:7777/api/v1/accounts/joined-groups",
