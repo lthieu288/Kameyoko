@@ -12,15 +12,17 @@ import EditQuestion from "../components/EditQuestion";
 
 const CreatePresentation = () => {
   const [disable, setDisable] = useState(false);
+  const [render, setRender] = useState(false);
   const navigate = useNavigate();
   const userInfo = JSON.parse(localStorage.getItem("currentUser"));
   const { id } = useParams();
   let [slides, setSlides] = useState([{ type: 1 }]);
-  let [color, setColor] = useState("");
   const [idSlide, setIdSlide] = useState(0);
   const [listOption, setListOption] = useState();
   const [title, setTitle] = useState("");
+  const [contentObject, setContentObject] = useState();
   const [idContent, setIdContent] = useState();
+  const [typeSlide,setTypeSlide] = useState(0)
   const host = "http://localhost:3000/presentation/public/";
 
   const createNewSlide = () => {
@@ -32,9 +34,8 @@ const CreatePresentation = () => {
     setDisable(false);
   };
   const callbackFunctionRender = () => {
-    setDisable(false);
+    setRender(true);
   };
-
   useEffect(() => {
     if (!userInfo) {
       navigate("/login?redirect=presentation/" + id);
@@ -42,6 +43,7 @@ const CreatePresentation = () => {
   }, [userInfo]);
   useEffect(() => {
     async function getAPIListPresent() {
+      setDisable(false);
       const response = await getSlidesPresentation(userInfo.token, id);
       if (response.data.slides !== null) setSlides(response.data.slides);
       else if (response.data.slides === null) {
@@ -49,6 +51,8 @@ const CreatePresentation = () => {
         setIdSlide(undefined);
       }
       if (response.data.slides?.length > 0) {
+        setContentObject(response.data.slides[0]?.content);
+        setTypeSlide(response.data.slides[0].type);
         setIdSlide(response.data.slides[0].id);
         setListOption(response.data.slides[0]?.content?.options);
         setTitle(response.data.slides[0]?.content?.title);
@@ -57,7 +61,9 @@ const CreatePresentation = () => {
     }
 
     getAPIListPresent();
-  }, []);
+    setRender(false)
+
+  }, [render]);
 
   const handlePresent = () => {};
 
@@ -138,11 +144,12 @@ const CreatePresentation = () => {
                   <div
                     className=""
                     onClick={() => (
+                      setContentObject(sl?.content),
+                      setTypeSlide(sl.type),
                       setIdSlide(sl.id),
                       setListOption(sl?.content?.options),
                       setTitle(sl?.content?.title),
-                      setIdContent(sl?.content?.id),
-                      setColor("red")
+                      setIdContent(sl?.content?.id)
                     )}
                   >
                     <SlideName />
@@ -157,11 +164,15 @@ const CreatePresentation = () => {
                 />
               ) : (
                 <EditQuestion
+                  typeSlide={typeSlide}
                   idContent={idContent}
                   id={idSlide}
+                  render={render}
                   title={title}
                   options={listOption}
+                  parentRender={callbackFunctionRender}
                   parentCallback={callbackFunction}
+                  content={contentObject}
                 />
               )}
             </Row>

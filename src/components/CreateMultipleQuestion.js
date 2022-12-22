@@ -7,11 +7,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import {useForm} from "react-hook-form";
 import Swal from "sweetalert2";
 import {createSlides} from "../services/PresentationService";
-import {useNavigate} from "react-router-dom";
 
 function CreateMultipleQuestion(props) {
     const [numberOption, setNumberOption] = useState(3);
-    const navigate = useNavigate();
     const userInfo = JSON.parse(localStorage.getItem("currentUser"));
     const {
         register,
@@ -19,16 +17,17 @@ function CreateMultipleQuestion(props) {
         formState: {},
     } = useForm();
     const savePresentation = async (data) => {
+        props.parentRender(true);
         let arrayOption = [];
-        if (data.name0 !== undefined)
+        if (data.name0 !== undefined  && data.name0 !== '')
             arrayOption.push({"name": data.name0})
-        if (data.name1 !== undefined)
+        if (data.name1 !== undefined && data.name1 !== '')
             arrayOption.push({"name": data.name1})
-        if (data.name2 !== undefined)
+        if (data.name2 !== undefined  && data.name2 !== '')
             arrayOption.push({"name": data.name2})
-        if (data.name3 !== undefined)
+        if (data.name3 !== undefined  && data.name3 !== '')
             arrayOption.push({"name": data.name3})
-        if (data.name4 !== undefined)
+        if (data.name4 !== undefined  && data.name4 !== '')
             arrayOption.push({"name": data.name4})
         let jsonCreateSlide = ({
             "type": 1, "content": {
@@ -44,7 +43,6 @@ function CreateMultipleQuestion(props) {
                     title: "Create Slide successfully",
                     showConfirmButton: false,
                 });
-                navigate("/presentation")
             } else {
                 Swal.fire({
                     icon: "error",

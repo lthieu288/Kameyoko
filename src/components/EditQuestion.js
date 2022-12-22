@@ -8,9 +8,17 @@ import {
 import {useForm} from "react-hook-form";
 import React, {useEffect, useState} from "react";
 import Slide from "./Slide";
-import {useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import { updateSlide} from "../services/PresentationService";
 import Swal from "sweetalert2";
+import EditMultipleQuestion from "./EditMultipleQuestion";
+import CreateMultipleQuestion from "./CreateMultipleQuestion";
+import CreateParagraphQuestion from "./CreateParagraphQuestion";
+import CreateHeadingQuestion from "./CreateHeadingQuestion";
+import Paragraph from "./Paragraph";
+import Heading from "./Heading";
+import EditParagraphQuestion from "./EditParagraphQuestion";
+import EditHeadingQuestion from "./EditHeadingQuestion";
 
 let createSlide = {
     "type": 1, "content": {
@@ -21,127 +29,75 @@ let createSlide = {
 }
 
 function EditQuestion(props) {
-    const [numberOption, setNumberOption] = useState(0);
-    const [listOption, setListOption] = useState([]);
-    const userInfo = JSON.parse(localStorage.getItem("currentUser"));
-    const navigate = useNavigate();
-    const {id} = useParams();
-    let [option, setOption] = useState([{
-        "id": 1,
-        "name": "ab"
-    }]);
 
-    useEffect(() => {
-        setNumberOption(props?.options?.length)
-        setListOption(props.options)
-    }, [props.options]);
-
-    const {
-        register,
-        handleSubmit,
-        formState: {},
-    } = useForm({});
-
-    for (let i = 0; i < numberOption; i++) {
-        for (let j = 0; j < option.length; j++) {
-            if (listOption[i].id === option[j].id) {
-                listOption[i] = option[j]
-            }
-        }
-    }
-    const savePresentation = async (data) => {
-        let jsonCreateSlide = ({
-            "type": 1, "content": {
-                "title": data.title,
-                "meta": "slide 6 meta changed",
-                "options": listOption
-            }
-        })
-        createSlide = jsonCreateSlide;
-        await updateSlide(jsonCreateSlide, userInfo.token, id, props.id, props.idContent).then((response) => {
-            if (response.status === 200) {
-                Swal.fire({
-                    icon: "success",
-                    title: "Update Slide successfully",
-                    showConfirmButton: false,
-                });
-                navigate("/presentation");
-            } else {
-                Swal.fire({
-                    icon: "error",
-                    title: response.message,
-                });
-            }
-        });
-    }
+    const callFunctionRender = () => {
+        props.parentRender(true);
+    };
     return (
         <>
             <div className="col-7">
-                <Slide data={props?.options} id={props.id} check={false}/>
+                {
+                    props.typeSlide === 1 ?
+                        <Slide data={props?.options} id={props.id} check={false}/>
+                        :
+                        props.typeSlide === 9 ?
+                            <Paragraph paragraph={"hey hey hey"}/>
+                            :
+                            <h2>
+                                <Heading heading={"hey hey hey"}/>
+                            </h2>
+                }
             </div>
             <div className="col-3">
-                <form
-                    className="bg-white p-3"
-                    style={{borderRadius: "10px", minHeight: "75vh"}}
-                    onSubmit={handleSubmit(savePresentation)}
-                >
-                    <div className="list-group">
-                        <h6 className="fw-bold mb-3">Slide type</h6>
-                        <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">
-                                Popular question type
-                            </InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                label="Popular question type"
-                            >
-                                <MenuItem value={1}>Multiple choice</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </div>
-                    <div className="my-3">
-                        <h6 className="fw-bold">Question</h6>
-                        <TextField
-                            label={props?.title}
-                            variant="outlined"
-                            className="form-control"
-                            size="medium"
-                            {...register("title")}
-
-                        />
-                    </div>
-                    <div className="my-3">
-                        <h6 className="fw-bold">Options</h6>
-                        {new Array(numberOption).fill(0).map((_, index) => (
-                            <div key={index} className="d-flex mb-2">
-                                <TextField
-                                    label={props?.options?.at(index)?.name}
-                                    variant="outlined"
-                                    className="form-control"
-                                    size="small"
-                                    onChange={e => (setOption([...option, {
-                                        "id": props?.options?.at(index)?.id,
-                                        "name": e.target.value
-                                    }]))}
-                                />
-
-                            </div>
-                        ))}
-                    </div>
-                    <div className="d-grid gap-2">
-
-                    </div>
-                    <div className="d-grid gap-2">
-                        <button
-                            className="btn btn-secondary"
-                            style={{color: "red", marginTop: "30px"}}
-                            type="submit"
+                <div className="list-group">
+                    <h6 className="fw-bold mb-3">Slide type</h6>
+                    <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">
+                            Popular question type
+                        </InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            label="Popular question type"
+                            value={props.typeSlide ? props.typeSlide : ""}
                         >
-                            Update Slide
-                        </button>
-                    </div>
-                </form>
+                            <MenuItem value={1}>Multiple choice</MenuItem>
+                            <MenuItem value={9}>Paragraph</MenuItem>
+                            <MenuItem value={8}>Heading</MenuItem>
+                        </Select>
+                    </FormControl>
+                </div>
+                {
+                    props.typeSlide === 1 ?
+                        <EditMultipleQuestion
+                            typeSlide={props.typeSlide}
+                            idContent={props.idContent}
+                            id={props.id}
+                            render={props.render}
+                            title={props.title}
+                            options={props.options}
+                            parentRender={callFunctionRender}
+                        />
+                        :
+                        props.typeSlide === 9 ?
+                            <EditParagraphQuestion
+                                typeSlide={props.typeSlide}
+                                idContent={props.idContent}
+                                id={props.id}
+                                content={props.content}
+                                parentRender={callFunctionRender}
+                            />
+                            :
+                            <h2>
+                                <EditHeadingQuestion
+                                    typeSlide={props.typeSlide}
+                                    idContent={props.idContent}
+                                    id={props.id}
+                                    content={props.content}
+                                    parentRender={callFunctionRender}
+                                />
+                            </h2>
+                }
             </div>
         </>
     );
