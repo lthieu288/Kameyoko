@@ -7,6 +7,7 @@ import { getGroups } from "../services/auth";
 import Footer from "../components/Footer";
 import Navbar from "../components/ResponsiveAppBar";
 import { createGroup } from "../services/auth";
+import { deleteGroup } from "../services/GroupService";
 import Swal from "sweetalert2";
 
 function Homepage() {
@@ -74,13 +75,22 @@ function Homepage() {
       if (result.isConfirmed) {
         console.log(e);
         if (e.role === "owner") {
-          Swal.fire({
-            icon: "success",
-            title: "Delete successfully",
-            showConfirmButton: false,
-            timer: 1000,
+          deleteGroup(user.token, e.group.id).then((res) => {
+            if (res.status === 200) {
+              Swal.fire({
+                icon: "success",
+                title: "Delete successfully",
+                showConfirmButton: false,
+                timer: 1000,
+              });
+              setRender(!render);
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Fail to delete group",
+              });
+            }
           });
-          setRender(false);
         } else {
           Swal.fire({
             icon: "info",
@@ -151,7 +161,10 @@ function Homepage() {
                 </div>
               </div>
               <div className="col-9 bg-white py-3">
-                <div class="container">
+                <div
+                  class="container"
+                  style={{ overflowY: "scroll", height: "100vh  " }}
+                >
                   <div class="row row-cols-3">
                     {groupRender?.map((row, index) => (
                       <div class="col mt-3">
@@ -191,7 +204,7 @@ function Homepage() {
                           <Card.Footer>
                             <div class="d-grid gap-2">
                               <button
-                                class="btn btn-outline-primary fw-bold"
+                                class="btn btn-light fw-bold"
                                 type="button"
                               >
                                 {row?.group.name}

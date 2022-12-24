@@ -6,6 +6,8 @@ import Swal from "sweetalert2";
 import { GoogleLogin } from "react-google-login";
 import { loginUser, useAuthDispatch } from "../Context";
 import { gapi } from "gapi-script";
+import { forgetPassword } from "../services/UserService";
+
 const clientId =
   "768128998994-6ltvdfgdgotov36pbbmqmv4apvjfsor5.apps.googleusercontent.com";
 function Login() {
@@ -74,6 +76,10 @@ function Login() {
         title: "Email is invalid",
         showConfirmButton: false,
         timer: 1000,
+      });
+    } else {
+      forgetPassword(email).then((res) => {
+        console.log(res);
       });
     }
   };
