@@ -8,8 +8,9 @@ import { loginUser, useAuthDispatch } from "../Context";
 import { gapi } from "gapi-script";
 import { forgetPassword } from "../services/UserService";
 
+// const clientId = "768128998994-6ltvdfgdgotov36pbbmqmv4apvjfsor5.apps.googleusercontent.com";
 const clientId =
-  "768128998994-6ltvdfgdgotov36pbbmqmv4apvjfsor5.apps.googleusercontent.com";
+  "12369507363-douqeq9o9pqaf40i4ij4rk1fql17t9nt.apps.googleusercontent.com";
 function Login() {
   const dispatch = useAuthDispatch();
   const [email, setEmail] = useState("");
@@ -134,6 +135,21 @@ function Login() {
                         onFailure={onFailure}
                         cookiePolicy={"single_host_origin"}
                       ></GoogleLogin>
+                    </div>
+                    <div className="form-outline mb-4 d-flex justify-content-center">
+                      <a
+                        href="http://localhost:7777/api/v1/oauth/google/login"
+                        style={{ textTransform: "none" }}
+                      >
+                        <div className="left">
+                          <img
+                            width="30px"
+                            alt='Google "G" Logo'
+                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+                          />
+                        </div>
+                        Login with Google
+                      </a>
                     </div>
                     <div className="d-flex justify-content-center">
                       <p className="mb-0 text-black center text-muted">
