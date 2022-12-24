@@ -75,7 +75,7 @@ const CreatePresentation = () => {
           <div className="d-flex justify-content-between bg-white p-2">
             <button
               type="button"
-              class="btn btn-outline-primary"
+              className="btn btn-outline-primary"
               onClick={() => navigate("/presentation")}
             >
               <KeyboardBackspace></KeyboardBackspace>
@@ -130,7 +130,7 @@ const CreatePresentation = () => {
               </span>
             </div>
             <div className="form-outline d-flex">
-              <button type="button" class="btn btn-secondary px-5">
+              <button type="button" className="btn btn-secondary px-5">
                 Share
               </button>
             </div>

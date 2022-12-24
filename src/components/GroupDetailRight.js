@@ -14,7 +14,7 @@ function GroupDetailRight(props) {
       </div>
       <h4 className="text-center my-3">{props.name}</h4>
       <hr />
-      <input type="text" class="form-control" value={props.link}></input>
+      <input type="text" className="form-control" value={props.link}></input>
       <hr />
     </div>
   );

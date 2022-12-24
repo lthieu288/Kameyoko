@@ -55,7 +55,7 @@ function GroupMemberDetail(props) {
       <div className="text-center">
         <button
           type="button"
-          class="btn btn-primary px-5"
+          className="btn btn-primary px-5"
           onClick={handleChangeRole}
           disabled={props.role === "owner" ? true : false}
         >

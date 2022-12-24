@@ -24,7 +24,7 @@ function Login() {
     }
   }
   const onSuccess = (res) => {
-    console.log("[Login Success] tokenUser: ", res.tokenId);
+    console.log("[Login Success] tokenUser: ", res);
   };
 
   const onFailure = (res) => {

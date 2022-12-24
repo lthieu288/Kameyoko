@@ -75,14 +75,14 @@ function Homepage() {
               style={{ minHeight: "70vh" }}
             >
               <div className="col-3 bg-white py-3">
-                <div class="list-group" id="list-tab" role="tablist">
+                <div className="list-group" id="list-tab" role="tablist">
                   <div
-                    class={`list-group-item list-group-item-action ${
+                      className={`list-group-item list-group-item-action ${
                       state === 1 ? "active" : ""
                     }`}
                     id="list-home-list"
                     data-toggle="list"
-                    href="#"
+                    ref="#"
                     role="tab"
                     aria-controls="home"
                     onClick={() => {
@@ -94,7 +94,7 @@ function Homepage() {
                     manage
                   </div>
                   <div
-                    class={`list-group-item list-group-item-action ${
+                      className={`list-group-item list-group-item-action ${
                       state === 2 ? "active" : ""
                     }`}
                     id="list-profile-list"
@@ -111,10 +111,10 @@ function Homepage() {
                   </div>
                 </div>
                 <hr />
-                <div class="d-grid gap-2">
+                <div className="d-grid gap-2">
                   <button
                     type="button"
-                    class="btn btn-outline-primary"
+                    className="btn btn-outline-primary"
                     onClick={() => setShowCreate(true)}
                   >
                     <Add style={{ marginRight: "10px" }}></Add>
@@ -123,10 +123,10 @@ function Homepage() {
                 </div>
               </div>
               <div className="col-9 bg-white py-3">
-                <div class="container">
-                  <div class="row row-cols-3">
+                <div className="container">
+                  <div className="row row-cols-3">
                     {groupRender?.map((row, index) => (
-                      <div class="col mt-3">
+                      <div className="col mt-3">
                         <Card
                           className="item-group"
                           style={{
@@ -188,7 +188,7 @@ function Homepage() {
         <Modal.Footer>
           <button
             type="button"
-            class="btn btn-secondary"
+            className="btn btn-secondary"
             data-bs-dismiss="modal"
             onClick={() => {
               setShowCreate(false);
@@ -198,7 +198,7 @@ function Homepage() {
           </button>
           <button
             type="button"
-            class="btn btn-primary"
+            className="btn btn-primary"
             onClick={handleCloseCreate}
           >
             Create new group
