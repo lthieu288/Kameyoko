@@ -33,6 +33,7 @@ function Login() {
 
   const onFailure = (res) => {
     console.log("[Login Failed] res: ", res);
+
   };
 
   useEffect(() => {
@@ -127,29 +128,38 @@ function Login() {
                     </div>
                     <hr className="my-4" />
                     <div className="form-outline mb-4 d-flex justify-content-center">
-                      <GoogleLogin
-                        variant="outlined"
-                        color="error"
-                        clientId={clientId}
-                        onSuccess={onSuccess}
-                        onFailure={onFailure}
-                        cookiePolicy={"single_host_origin"}
-                      ></GoogleLogin>
-                    </div>
-                    <div className="form-outline mb-4 d-flex justify-content-center">
-                      <a
-                        href="http://localhost:7777/api/v1/oauth/google/login"
-                        style={{ textTransform: "none" }}
-                      >
-                        <div className="left">
-                          <img
-                            width="30px"
-                            alt='Google "G" Logo'
-                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
-                          />
-                        </div>
-                        Login with Google
-                      </a>
+                        <a
+                            className="button button-login-with-gg"
+                            href="http://localhost:7777/api/v1/oauth/google/login"
+                            style={{
+                              backgroundColor: "rgb(255, 255, 255)",
+                              display: "inline-flex",
+                              alignItems: "center",
+                              color: "rgba(0, 0, 0, 0.54)",
+                              boxShadow: "rgb(0 0 0 / 24%) 0px 2px 2px 0px, rgb(0 0 0 / 24%) 0px 0px 1px 0px",
+                              padding: "3px",
+                              borderRadius: "4px",
+                              border: "1px solid transparent",
+                              paddingRight:"10px",
+                              fontSize: "14px",
+                              fontWeight: "500",
+                              fontFamily: "Roboto, sans-serif"}}
+                        >
+                          <div className="left">
+                            <img
+                                style={{
+                                  width:"18px",
+                                  height:"18px",
+                                  margin:"8px",
+                                  background: "rgb(255, 255, 255)",
+                                  borderRadius: "2px"}}
+                                width="30px"
+                                alt='Google "G" Logo'
+                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+                            />
+                          </div>
+                          Sign in with Google
+                        </a>
                     </div>
                     <div className="d-flex justify-content-center">
                       <p className="mb-0 text-black center text-muted">
