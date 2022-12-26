@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Modal, Card } from "react-bootstrap";
-import { Groups, Person, Add } from "@mui/icons-material";
-import { TextField } from "@mui/material";
+import { Groups, Person, Add, HighlightOff } from "@mui/icons-material";
+import { TextField, Tooltip } from "@mui/material";
 import { getGroups } from "../services/auth";
 import Footer from "../components/Footer";
 import Navbar from "../components/ResponsiveAppBar";
 import { createGroup } from "../services/auth";
+import { deleteGroup } from "../services/GroupService";
 import Swal from "sweetalert2";
 
 function Homepage() {
@@ -61,6 +62,43 @@ function Homepage() {
           icon: "error",
           title: response.message,
         });
+      }
+    });
+  };
+  const handleDelete = (e) => {
+    Swal.fire({
+      title: "Do you want to delete this group?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Delete",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        console.log(e);
+        if (e.role === "owner") {
+          deleteGroup(user.token, e.group.id).then((res) => {
+            if (res.status === 200) {
+              Swal.fire({
+                icon: "success",
+                title: "Delete successfully",
+                showConfirmButton: false,
+                timer: 1000,
+              });
+              setRender(!render);
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Fail to delete group",
+              });
+            }
+          });
+        } else {
+          Swal.fire({
+            icon: "info",
+            title: "You don't have permission",
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        }
       }
     });
   };
@@ -123,7 +161,10 @@ function Homepage() {
                 </div>
               </div>
               <div className="col-9 bg-white py-3">
-                <div className="container">
+                <div
+                  className="container"
+                  style={{ overflowY: "scroll", height: "100vh  " }}
+                >
                   <div className="row row-cols-3">
                     {groupRender?.map((row, index) => (
                       <div className="col mt-3">
@@ -135,6 +176,19 @@ function Homepage() {
                             margin: 0,
                           }}
                         >
+                          <Card.Header>
+                            <div className="d-flex justify-content-between">
+                              Group
+                              <Tooltip title="Delete">
+                                <HighlightOff
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => {
+                                    handleDelete(row);
+                                  }}
+                                ></HighlightOff>
+                              </Tooltip>
+                            </div>
+                          </Card.Header>
                           <Link to={`/group/${row.group.id}`}>
                             <Card.Img
                               variant="top"
@@ -148,11 +202,13 @@ function Homepage() {
                             />
                           </Link>
                           <Card.Footer>
-                            <div
-                              className="name-group"
-                              style={{ cursor: "pointer" }}
-                            >
-                              {row?.group.name}
+                            <div class="d-grid gap-2">
+                              <button
+                                class="btn btn-light fw-bold"
+                                type="button"
+                              >
+                                {row?.group.name}
+                              </button>
                             </div>
                           </Card.Footer>
                         </Card>

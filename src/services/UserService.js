@@ -22,3 +22,29 @@ export async function postVote(token, idPre, idCont, idOpt) {
   );
   return response;
 }
+
+// export async function forgetPassword(email) {
+//   const response = await request.get("/auth/forgot-password", {
+//     headers: {
+//       "Content-type": "application/json; charset=UTF-8",
+//     },
+//     data: {
+//       email: email,
+//     },
+//   });
+//   return response;
+// }
+
+export async function forgetPassword(email) {
+  const response = await fetch(
+    "http://localhost:7777/api/v1/auth/forgot-password",
+    {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(email),
+    }
+  );
+  return response;
+}

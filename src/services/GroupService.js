@@ -115,3 +115,19 @@ export async function kickOff(token, groupId, userId) {
     });
   return response;
 }
+
+export async function deleteGroup(token, groupId) {
+  const response = await request
+    .delete("/group/delete/" + groupId, {
+      headers: {
+        Authorization: token,
+      },
+    })
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      return error;
+    });
+  return response;
+}

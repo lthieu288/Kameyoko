@@ -83,7 +83,7 @@ function ResponsiveAppBar() {
           </Box>
         </Toolbar>
         <Dropdown>
-          <Dropdown.Toggle variant="info">
+          <Dropdown.Toggle variant="light">
             {user ? user.user.username : null}
           </Dropdown.Toggle>
           <Dropdown.Menu>
