@@ -3,10 +3,6 @@ import Card from "react-bootstrap/Card";
 import '../styles/CreateGroup.module.css';
 
 function SlideName(props) {
-    console.log("Slide")
-    console.log(props.type)
-    console.log(props.active)
-    console.log(props.id)
     return (
         <>
             <div

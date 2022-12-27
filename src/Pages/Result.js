@@ -29,7 +29,7 @@ function Result() {
 
   return (
     <div>
-      <Slide2 token={userInfo.token} id={params.id} />
+      <Slide2 token={userInfo.token} id={params.id} listSlide={listSlide}/>
     </div>
   );
 }

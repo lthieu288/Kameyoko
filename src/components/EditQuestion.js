@@ -20,14 +20,6 @@ import Heading from "./Heading";
 import EditParagraphQuestion from "./EditParagraphQuestion";
 import EditHeadingQuestion from "./EditHeadingQuestion";
 
-let createSlide = {
-    "type": 1, "content": {
-        "title": "",
-        "meta": "your meta",
-        "options": []
-    }
-}
-
 function EditQuestion(props) {
 
     const callFunctionRender = () => {

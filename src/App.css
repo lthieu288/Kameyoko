@@ -108,3 +108,5 @@
 .active-slide{
   background-color: #C0F2FC !important;
 }
+.button-check button[disabled]{
+}

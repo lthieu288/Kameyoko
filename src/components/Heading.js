@@ -1,8 +1,6 @@
 import React from "react";
 
 function Heading(props) {
-    console.log("heading")
-    console.log(props.heading)
   return (
       <div
           className="text-center p-5"

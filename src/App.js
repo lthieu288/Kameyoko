@@ -22,7 +22,6 @@ function App() {
           <Route index element={<HomePage />} />
           <Route exact path="/" element={<HomePage />} />
           <Route path="/group/:id" element={<GroupDetail />} />
-
           <Route path="/presentation" element={<Presentation />} />
           <Route path="/presentation/:id" element={<Slide />} />
           <Route path="/view-host" element={<ViewForTheHost />} />
