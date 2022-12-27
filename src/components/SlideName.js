@@ -1,28 +1,52 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
+import '../styles/CreateGroup.module.css';
 
-function SlideName() {
+function SlideName(props) {
+    console.log("Slide")
+    console.log(props.type)
+    console.log(props.active)
+    console.log(props.id)
     return (
-        <div
-            className=" bg-white p-3"
-            style={{borderRadius: "10px", minHeight: "200px"}}
-            // style={{ borderRadius: "10px", minHeight: "75vh" }}
-        >
-
-            <div className="d-grid gap-2">
-                <Card.Img
-                    variant="top"
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Blue_question_mark_icon.svg/1200px-Blue_question_mark_icon.svg.png?fbclid=IwAR2XnW1C-TVMsohYMOmiErIFBGufYe9OcON9SOLcrPRs2TyWBGB5Kvr_u1k"
-                    style={{
-                        width: "100%",
-                        height: "8rem",
-                    }}
-                />
-                {/*<button className="btn btn-primary" type="button">*/}
-                {/*  Button*/}
-                {/*</button>*/}
+        <>
+            <div
+                className={`p-3 ${props.active ? 'active-slide' : 'non-active-slide'}`}
+                style={{borderRadius: "10px", marginBottom: "10px"}}
+            >
+                <div className="d-grid gap-2">
+                    {
+                        props.type === 1 ?
+                            <Card.Img
+                                variant="top"
+                                src="https://cdn-icons-png.flaticon.com/512/2567/2567943.png"
+                                style={{
+                                    width: "100%",
+                                    height: "8rem",
+                                    padding: "11px",
+                                    backgroundColor: "white",
+                                    borderRadius: "4px",
+                                    border: "1px solid rgb(183, 186, 194)"
+                                }}
+                            />
+                            :
+                            <Card.Img
+                                variant="top"
+                                src="https://cdn-icons-png.flaticon.com/512/3527/3527892.png"
+                                style={{
+                                    width: "100%",
+                                    height: "8rem",
+                                    padding: "11px",
+                                    backgroundColor: "white",
+                                    borderRadius: "4px",
+                                    border: "1px solid rgb(183, 186, 194)"
+                                }}
+                            />
+                    }
+                </div>
             </div>
-        </div>
+
+        </>
+
     );
 }
 

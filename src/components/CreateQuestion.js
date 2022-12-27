@@ -22,6 +22,8 @@ let createSlide = {
 
 function CreateQuestion(props) {
     const [typeSlide,setTypeSlide] = useState(1)
+    console.log("CreateQuestion")
+    console.log(typeSlide)
     const callFunctionRender = () => {
         props.parentRender(true);
     };

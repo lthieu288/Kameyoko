@@ -9,6 +9,7 @@ import CreateQuestion from "../components/CreateQuestion";
 import { getSlidesPresentation } from "../services/PresentationService";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import EditQuestion from "../components/EditQuestion";
+import Card from "react-bootstrap/Card";
 
 const CreatePresentation = () => {
   const [disable, setDisable] = useState(false);
@@ -23,6 +24,7 @@ const CreatePresentation = () => {
   const [contentObject, setContentObject] = useState();
   const [idContent, setIdContent] = useState();
   const [typeSlide,setTypeSlide] = useState(0)
+  const [checkOnChoice , setCheckOnChoice] = useState("")
   const host = "http://localhost:3000/presentation/public/";
 
   const createNewSlide = () => {
@@ -57,6 +59,7 @@ const CreatePresentation = () => {
         setListOption(response.data.slides[0]?.content?.options);
         setTitle(response.data.slides[0]?.content?.title);
         setIdContent(response.data.slides[0]?.content?.id);
+        setCheckOnChoice(response.data.slides[0].id)
       }
     }
 
@@ -65,7 +68,9 @@ const CreatePresentation = () => {
 
   }, [render]);
 
-  const handlePresent = () => {};
+  const checkSlide = () => {
+    setCheckOnChoice(false)
+  };
 
   return (
     <>
@@ -75,7 +80,7 @@ const CreatePresentation = () => {
           <div className="d-flex justify-content-between bg-white p-2">
             <button
               type="button"
-              class="btn btn-outline-primary"
+              className="btn btn-outline-primary"
               onClick={() => navigate("/presentation")}
             >
               <KeyboardBackspace></KeyboardBackspace>
@@ -130,7 +135,7 @@ const CreatePresentation = () => {
               </span>
             </div>
             <div className="form-outline d-flex">
-              <button type="button" class="btn btn-secondary px-5">
+              <button type="button" className="btn btn-secondary px-5">
                 Share
               </button>
             </div>
@@ -141,19 +146,24 @@ const CreatePresentation = () => {
             <Row className="my-3">
               <div className="col-2">
                 {slides?.map((sl) => (
-                  <div
-                    className=""
-                    onClick={() => (
-                      setContentObject(sl?.content),
-                      setTypeSlide(sl.type),
-                      setIdSlide(sl.id),
-                      setListOption(sl?.content?.options),
-                      setTitle(sl?.content?.title),
-                      setIdContent(sl?.content?.id)
-                    )}
-                  >
-                    <SlideName />
-                  </div>
+                    <>
+                      {checkSlide}
+                      <div
+                          className=""
+                          onClick={() => (
+                              setContentObject(sl?.content),
+                                  setTypeSlide(sl.type),
+                                  setIdSlide(sl.id),
+                                  setListOption(sl?.content?.options),
+                                  setTitle(sl?.content?.title),
+                                  setIdContent(sl?.content?.id),
+                                  setCheckOnChoice(sl.id)
+                          )}
+                      >
+                        <SlideName type={sl.type} id={sl.id} active= {sl.id === checkOnChoice}/>
+                      </div>
+                    </>
+
                 ))}
               </div>
               {idSlide === undefined ? (
