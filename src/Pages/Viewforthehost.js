@@ -6,7 +6,7 @@ import { getListSlide } from "../services/UserService";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-function ViewForTheHost() {
+function ViewForTheHost(props) {
   const [textValue, setTextValue] = useState("");
   const userInfo = JSON.parse(localStorage.getItem("currentUser"));
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ function ViewForTheHost() {
       const response = await getListSlide(userInfo.token, textValue).then(
         (res) => {
           if (res.data.slides != null) {
-            navigate("/result/" + textValue);
+            navigate("/result/public/" + textValue);
           } else {
             Swal.fire({
               icon: "error",

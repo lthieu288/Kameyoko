@@ -15,6 +15,8 @@ import {
   TextField,
   InputAdornment,
 } from "@mui/material";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+
 import Swal from "sweetalert2";
 import { AccountCircle, MoreHoriz, GroupAdd } from "@mui/icons-material";
 import { format } from "date-fns";
@@ -28,7 +30,7 @@ import {
   kickOff,
 } from "../services/GroupService";
 
-function GroupDetail() {
+function GroupDetail(props) {
   const navigate = useNavigate();
   const [groupData, setGroupData] = useState();
   const [member, setMember] = useState(null);
@@ -222,6 +224,27 @@ function GroupDetail() {
                     ),
                   }}
                 />
+                {
+                  props.code !== undefined ?
+                      <>
+                        <hr />
+                        <TextField
+                            placeholder="abc@gmail.com"
+                            label="Invite via email"
+                            value="code"
+                            fullWidth
+                            InputProps={{
+                              endAdornment: (
+                                  <ArrowForwardIosIcon position="start" onClick={()=> console.log("click")}>
+                                  </ArrowForwardIosIcon>
+                              ),
+                            }}
+                        />
+                      </>
+                      :
+                      ""
+                }
+
               </div>
               <TableContainer
                 className="col-9 mx-3"

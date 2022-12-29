@@ -12,6 +12,7 @@ import Slide from "./Pages/CreatePresentation";
 import ViewForTheHost from "./Pages/Viewforthehost";
 import ChoiceQuestion from "./Pages/ChoiceQuestion";
 import Result from "./Pages/Result";
+import ResultPublic from "./Pages/ResultPublic";
 function App() {
   return (
     <>
@@ -26,6 +27,7 @@ function App() {
           <Route path="/presentation/:id" element={<Slide />} />
           <Route path="/view-host" element={<ViewForTheHost />} />
           <Route path="/result/:id" element={<Result />} />
+          <Route path="/result/public/:id" element={<ResultPublic />} />
           <Route path="/presentation/public/:id" element={<ChoiceQuestion />} />
           <Route path="/profile" element={<EditProfile />} />
           <Route exact path="/create-group" element={<CreateGroup />} />
