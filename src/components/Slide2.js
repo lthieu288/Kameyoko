@@ -7,11 +7,6 @@ import {Link} from "react-router-dom";
 function Slide2(props) {
   const [typeSlide, setTypeSlide] = useState();
   const [contentSlide, setContentSlide] = useState();
-  console.log(props.listSlide)
-  console.log("Slide2")
-  console.log(typeSlide)
-  console.log(contentSlide)
-
 
   useEffect(() => {
     setTypeSlide(props?.listSlide?.type)
