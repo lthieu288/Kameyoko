@@ -12,6 +12,7 @@ import Slide from "./Pages/CreatePresentation";
 import ViewForTheHost from "./Pages/Viewforthehost";
 import ChoiceQuestion from "./Pages/ChoiceQuestion";
 import Result from "./Pages/Result";
+import Chat from "./Pages/Chat";
 function App() {
   return (
     <>
@@ -32,6 +33,7 @@ function App() {
           <Route exact path="/create-group" element={<CreateGroup />} />
           <Route path="/join-group/:id" element={<JoinGroup />} />
           <Route path="*" element={<p>There's nothing here: 404!</p>} />
+          <Route path="/chat" element={<Chat />} />
         </Routes>
       </Router>
     </>
