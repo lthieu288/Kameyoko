@@ -10,6 +10,7 @@ export default function ChoiceQuestion() {
   const userInfo = JSON.parse(localStorage.getItem("currentUser"));
   const [checkNextDisable, setCheckNextDisable] = useState(false)
   const [checkPrevDisable, setCheckPrevDisable] = useState(false)
+  const [checkDisable, setCheckDisable] = useState(false)
   const [listSlide, setListSlide] = useState([]);
   const [slide, setSlide] = useState();
   const [number, setNumber] = useState(0);
@@ -18,6 +19,7 @@ export default function ChoiceQuestion() {
   const params = useParams();
 
   useEffect(() => {
+    setCheckDisable(false)
     setCheckPrevDisable(true)
     async function getAPIListSlide() {
       return await getListSlide(userInfo.token, params.id).then(
@@ -26,9 +28,15 @@ export default function ChoiceQuestion() {
               setCheckNextDisable(true)
             }
             setListSlide(res.data.slides);
-            setSlide(res.data.slides[0]);
-            setType(res.data.slides[0].type)
-            setContentSlide(res.data.slides[0].content)
+            let socket = new WebSocket(`ws://localhost:7777/ws?presId=${params.id}`);
+            socket.onopen = function () {
+                socket.send(res.data.slides[0].id)
+                socket.onmessage = (msg) => {
+                    setType(JSON.parse(msg.data).type)
+                    setContentSlide(JSON.parse(msg.data).content)
+                    setSlide(JSON.parse(msg.data));
+                };
+            };
           }
       );
     }
@@ -39,51 +47,51 @@ export default function ChoiceQuestion() {
       if(listSlide[number].id !== undefined) {
           const socket = new WebSocket(`ws://localhost:7777/ws?presId=${params.id}`);
           socket.onopen = function (event) {
-              socket.send(listSlide[number].id)
+              socket.send(slide.id)
           };
       }
       async function postApiVote() {
-        const response = await postVote(
-          userInfo.token,
+          return await postVote(
+            userInfo.token,
             params.id.toString(),
-            listSlide[number].content.id,
+            slide.content.id,
             value
         ).then((res) => {
-          console.log(res);
+            console.log(res);
         });
-        return response;
       }
       postApiVote();
       const socket = new WebSocket(`ws://localhost:7777/ws?presId=${params.id}`);
       socket.onopen = function (event) {
-          socket.send(listSlide[number].id)
+          socket.send(slide.id)
       };
   }
-  const handleClickPrev = () => {
-    setCheckNextDisable(false)
-    const numPrev = (number - 1);
-    setNumber(number - 1);
-    setType(listSlide[numPrev].type)
-    setContentSlide(listSlide[numPrev].content)
-    if(numPrev -1  === -1){
-       setCheckPrevDisable(true)
-       setCheckNextDisable(false)
-    }
-  };
-
-  const handleClickNext = () => {
-    setCheckPrevDisable(false)
-    const num = (number + 1);
-    setNumber(number + 1);
-    setType(listSlide[num].type)
-    setContentSlide(listSlide[num].content)
-    if(num +1 === listSlide.length){
-      setCheckNextDisable(true)
-      setCheckPrevDisable(false)
-    }
-  };
+  // const handleClickPrev = () => {
+  //   setCheckNextDisable(false)
+  //   const numPrev = (number - 1);
+  //   setNumber(number - 1);
+  //   setType(listSlide[numPrev].type)
+  //   setContentSlide(listSlide[numPrev].content)
+  //   if(numPrev -1  === -1){
+  //      setCheckPrevDisable(true)
+  //      setCheckNextDisable(false)
+  //   }
+  // };
+  //
+  // const handleClickNext = () => {
+  //   setCheckPrevDisable(false)
+  //   const num = (number + 1);
+  //   setNumber(number + 1);
+  //   setType(listSlide[num].type)
+  //   setContentSlide(listSlide[num].content)
+  //   if(num +1 === listSlide.length){
+  //     setCheckNextDisable(true)
+  //     setCheckPrevDisable(false)
+  //   }
+  // };
   const handleChange = (event) => {
-    saveVote(event.target.value)
+      setCheckDisable(true)
+      saveVote(event.target.value)
   };
   return (
     <>
@@ -169,10 +177,10 @@ export default function ChoiceQuestion() {
             }
         </div>
       </Container>
-      <Container style={{ marginTop: "20px", textAlign: "center" }}>
-        <ButtonComponent name={"Prev"} parentPrevClick={handleClickPrev} disable={checkPrevDisable}/>
-        <ButtonComponent name={"Next"} parentNextClick={handleClickNext} disable={checkNextDisable}/>
-      </Container>
+      {/*<Container style={{ marginTop: "20px", textAlign: "center" }}>*/}
+      {/*  <ButtonComponent name={"Prev"} parentPrevClick={handleClickPrev} disable={checkPrevDisable}/>*/}
+      {/*  <ButtonComponent name={"Next"} parentNextClick={handleClickNext} disable={checkNextDisable}/>*/}
+      {/*</Container>*/}
     </>
   );
 }
