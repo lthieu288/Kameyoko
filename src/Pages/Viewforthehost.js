@@ -1,12 +1,11 @@
-import React from "react";
-import { Container } from "react-bootstrap";
-import { TextField } from "@mui/material";
-import { useState } from "react";
-import { getListSlide } from "../services/UserService";
-import { useNavigate } from "react-router-dom";
+import React, {useState} from "react";
+import {Container} from "react-bootstrap";
+import {TextField} from "@mui/material";
+import {getListSlide} from "../services/UserService";
+import {useNavigate} from "react-router-dom";
 import Swal from "sweetalert2";
 
-function ViewForTheHost(props) {
+function ViewForTheHost() {
   const [textValue, setTextValue] = useState("");
   const userInfo = JSON.parse(localStorage.getItem("currentUser"));
   const navigate = useNavigate();
@@ -16,22 +15,23 @@ function ViewForTheHost(props) {
   };
 
   const handleClick = () => {
-    console.log(textValue);
+    if (!userInfo) {
+        navigate("/login?redirect=result");
+    }
     async function getAPIListSlide() {
-      const response = await getListSlide(userInfo.token, textValue).then(
-        (res) => {
-          if (res.data.slides != null) {
-            navigate("/result/public/" + textValue);
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Invalid code",
-              text: "Check your code again, please",
-            });
+        return await getListSlide(userInfo.token, textValue).then(
+          (res) => {
+              if (res.data.slides != null) {
+                  navigate("/presentation/public/" + textValue);
+              } else {
+                  Swal.fire({
+                      icon: "error",
+                      title: "Invalid code",
+                      text: "Check your code again, please",
+                  });
+              }
           }
-        }
       );
-      return response;
     }
     getAPIListSlide();
   };

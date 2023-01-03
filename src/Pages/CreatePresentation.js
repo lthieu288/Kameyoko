@@ -3,13 +3,14 @@ import Footer from "../components/Footer";
 import Navbar from "../components/ResponsiveAppBar";
 import AddIcon from "@mui/icons-material/Add";
 import { KeyboardBackspace, PlayCircleOutline } from "@mui/icons-material";
-import { Row } from "react-bootstrap";
+import {Dropdown, Modal, Row} from "react-bootstrap";
 import SlideName from "../components/SlideName";
 import CreateQuestion from "../components/CreateQuestion";
-import { getSlidesPresentation } from "../services/PresentationService";
+import {createShowPresentToGroup, getSlidesPresentation} from "../services/PresentationService";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import EditQuestion from "../components/EditQuestion";
-import Card from "react-bootstrap/Card";
+import { getGroupsManage} from "../services/auth";
+import Swal from "sweetalert2";
 
 const CreatePresentation = () => {
   const [disable, setDisable] = useState(false);
@@ -25,6 +26,9 @@ const CreatePresentation = () => {
   const [idContent, setIdContent] = useState();
   const [typeSlide,setTypeSlide] = useState(0)
   const [checkOnChoice , setCheckOnChoice] = useState("")
+  const [showCreate, setShowCreate] = useState(false);
+  const [listGroup,setListGroup] = useState([])
+  const [idGroup,setIdGroup] = useState()
   const host = "http://localhost:3000/presentation/public/";
 
   const createNewSlide = () => {
@@ -48,7 +52,7 @@ const CreatePresentation = () => {
       setDisable(false);
       const response = await getSlidesPresentation(userInfo.token, id);
       if (response.data.slides !== null) setSlides(response.data.slides);
-      else if (response.data.slides === null) {
+      else{
         setSlides([]);
         setIdSlide(undefined);
       }
@@ -62,8 +66,10 @@ const CreatePresentation = () => {
         setCheckOnChoice(response.data.slides[0].id)
       }
     }
-
     getAPIListPresent();
+    getGroupsManage(userInfo.token).then((data) => {
+      setListGroup(data.groups_data)
+    });
     setRender(false)
 
   }, [render]);
@@ -71,6 +77,28 @@ const CreatePresentation = () => {
   const checkSlide = () => {
     setCheckOnChoice(false)
   };
+  const choiceGroup = (event) => {
+    setIdGroup(event.target.value)
+  };
+
+  const showGroup = async () =>{
+    let body = {
+      "group_id": Number(idGroup),
+      "user_id": userInfo?.user.id
+    }
+    await createShowPresentToGroup(body, userInfo.token, id).then((response) => {
+      if (response.status === 200) {
+        window.open("/result/group/" + id, "_blank")
+        setShowCreate(false)
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: response.message,
+        });
+      }
+    });
+
+  }
 
   return (
     <>
@@ -87,18 +115,25 @@ const CreatePresentation = () => {
               Name presentation
             </button>
             <div className="form-outline d-flex">
-              <button
-                type="button"
-                className="btn btn-primary px-4"
-                onClick={() => {
-                  window.open("/result/" + id, "_blank");
-                }}
-              >
-                <PlayCircleOutline
-                  style={{ marginRight: "5px" }}
-                ></PlayCircleOutline>
-                Present
-              </button>
+              <Dropdown>
+                <Dropdown.Toggle variant="light" style={{backgroundColor:"#0d6efd"}}>
+                  <PlayCircleOutline
+                      style={{ marginRight: "5px" }}
+                  ></PlayCircleOutline>
+                  Present
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item    onClick={() => {
+                    window.open("/result/public/" + id, "_blank");
+                  }}>
+                    Public
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={() => { setShowCreate(true); }}>
+                    Group
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+
             </div>
           </div>
           <div className="d-flex justify-content-between bg-white p-2 mt-2">
@@ -190,6 +225,76 @@ const CreatePresentation = () => {
         </div>
       </div>
       <Footer />
+      <Modal
+          show={showCreate}
+          onHide={() => {
+            setShowCreate(false);
+          }}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Choice Group Show</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="option">
+            <div className="my-3">
+              <div
+                  className="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3"
+                  id="options"
+              >
+                {listGroup.map((el) => (
+                    <div className="choice-group">
+                      <label
+                          style={{
+                            borderWidth: "2px",
+                            fontSize: "17px",
+                          }}
+                          className="options"
+                      >
+                        {el.name}
+                        <input
+                            type="radio"
+                            name="radio"
+                            value={el.id}
+                            onChange={choiceGroup}
+                        />
+                        <span className="checkmark"></span>
+                      </label>
+                    </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <button
+              type="button"
+              className="btn btn-secondary"
+              data-bs-dismiss="modal"
+              onClick={()=> setShowCreate(false)}
+          >
+            Cancel
+          </button>
+          {
+            idGroup === undefined ?
+                <button
+                    type="button"
+                    className="btn btn-primary"
+                    disabled
+                >
+                  Show
+                </button>
+                :
+                <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={showGroup}
+                >
+                  Show
+                </button>
+
+          }
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

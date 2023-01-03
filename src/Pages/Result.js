@@ -4,6 +4,8 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import {getListSlide} from "../services/UserService";
 import ButtonComponent from "../components/ButtonComponent";
 import {Container} from "react-bootstrap";
+import {getPresentation} from "../services/PresentationService";
+import CloseButton from "react-bootstrap/CloseButton";
 
 function Result() {
   const [number, setNumber] = useState(0);
@@ -16,11 +18,17 @@ function Result() {
   const [checkPrevDisable, setCheckPrevDisable] = useState(false)
   useEffect(() => {
     if (!userInfo) {
-      navigate("/login?redirect=result/" + params.id);
+      navigate("/login?redirect=result/public/" + params.id);
     }
     setCheckPrevDisable(true)
-    async function getAPIListSlide() {
-      return await getListSlide(userInfo.token, params.id).then(
+    getPresentation(userInfo.token,  params.id).then((response) =>{
+        if (response.data !== null){
+          if (response.data.data.owner.id.toString() !==  userInfo.user.id.toString()) {
+            navigate("/login?redirect=result/public/" + params.id);
+          }
+        }
+      });
+    getListSlide(userInfo.token, params.id).then(
           (res) => {
             setListSlide(res.data.slides);
             if(1 === res.data.slides.length){
@@ -31,16 +39,15 @@ function Result() {
               socket.send(res.data.slides[0].id)
               socket.onmessage = (msg) => {
                 setListSlideSocket(JSON.parse(msg.data));
+                console.log(JSON.parse(msg.data))
               };
             };
           }
       );
-    }
-    getAPIListSlide();
 
   }, []);
 
-  function nextButton() {
+  const nextButton = ()=> {
     setCheckPrevDisable(false)
     const num = (number + 1);
     setNumber(number + 1);
@@ -76,9 +83,20 @@ function Result() {
       setCheckNextDisable(false)
     }
   };
+  const leaveShowSlide = () => {
+      let socket = new WebSocket(`ws://localhost:7777/ws?presId=${params.id}`);
+      socket.onopen = function () {
+        socket.send("123456")
+        socket.onmessage = (msg) => {
+          setListSlideSocket(JSON.parse(msg.data));
+          console.log(JSON.parse(msg.data))
+        };
+      };
+  };
 
   return (
     <div>
+      <CloseButton className="button-cancel" onClick={()=>{leaveShowSlide()}} />
       <div style={{textAlign:"center" , fontSize:"25px" , fontWeight:"regular"}}>
         <div>
           Go to
@@ -91,7 +109,7 @@ function Result() {
           <span style={{color: "rgb(37, 43, 54)", fontWeight:"700"}}>{params.id}</span>
         </div>
       </div>
-      <Slide2 token={userInfo.token} id={params.id} listSlide={listSlideSocket}/>
+      <Slide2 token={userInfo?.token} id={params.id} listSlide={listSlideSocket}/>
       <Container style={{ marginTop: "20px",textAlign: "center" }}>
         <ButtonComponent name={"Prev"} parentPrevClick={prevButton} disable={checkPrevDisable}/>
         <ButtonComponent name={"Next"} parentNextClick={nextButton} disable={checkNextDisable}/>

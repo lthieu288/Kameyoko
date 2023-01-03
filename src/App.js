@@ -13,6 +13,8 @@ import ViewForTheHost from "./Pages/Viewforthehost";
 import ChoiceQuestion from "./Pages/ChoiceQuestion";
 import Result from "./Pages/Result";
 import ResultPublic from "./Pages/ResultPublic";
+import ResultGroup from "./Pages/ResultGroup";
+import PresentationGroup from "./Pages/PresentationGroup";
 function App() {
   return (
     <>
@@ -26,9 +28,11 @@ function App() {
           <Route path="/presentation" element={<Presentation />} />
           <Route path="/presentation/:id" element={<Slide />} />
           <Route path="/view-host" element={<ViewForTheHost />} />
-          <Route path="/result/:id" element={<Result />} />
-          <Route path="/result/public/:id" element={<ResultPublic />} />
+          <Route path="/view-host-public" element={<ViewForTheHost />} />
+          <Route path="/result/public/:id" element={<Result />} />
+          <Route path="/result/group/:id" element={<ResultGroup />} />
           <Route path="/presentation/public/:id" element={<ChoiceQuestion />} />
+          <Route path="/presentation/group/:idGroup/:id" element={<PresentationGroup />} />
           <Route path="/profile" element={<EditProfile />} />
           <Route exact path="/create-group" element={<CreateGroup />} />
           <Route path="/join-group/:id" element={<JoinGroup />} />

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Modal, Card } from "react-bootstrap";
 import { Groups, Person, Add, HighlightOff } from "@mui/icons-material";
 import { TextField, Tooltip } from "@mui/material";
-import { getGroups } from "../services/auth";
+import {getGroups, getGroupsManage} from "../services/auth";
 import Footer from "../components/Footer";
 import Navbar from "../components/ResponsiveAppBar";
 import { createGroup } from "../services/auth";
@@ -26,24 +26,23 @@ function Homepage() {
       navigate("/login?redirect=");
     }
     getGroups(user?.token).then((data) => {
-      console.log(data);
-      setGroupOwner([]);
       setGroupJoin([]);
-      setGroupRender([]);
       let obj = null;
       let owner = [];
       let join = [];
       for (var i = 0; i < data.groups_data?.length; i++) {
-        obj = data.groups_data[i];
+        obj = data.groups_data[i].group;
         if (data.groups_data[i].role === "owner") {
           owner.push(obj);
         } else {
           join.push(obj);
         }
       }
-      setGroupOwner(owner);
-      setGroupRender(owner);
       setGroupJoin(join);
+    });
+    getGroupsManage(user?.token).then((data)=>{
+      setGroupOwner(data.groups_data);
+      setGroupRender(data.groups_data);
     });
   }, [render]);
 
@@ -189,7 +188,7 @@ function Homepage() {
                               </Tooltip>
                             </div>
                           </Card.Header>
-                          <Link to={`/group/${row.group.id}`}>
+                          <Link to={`/group/${row.id}`}>
                             <Card.Img
                               variant="top"
                               src="https://cdn.memiah.co.uk/blog/wp-content/uploads/counselling-directory.org.uk/2019/04/shutterstock_1464234134-1024x684.jpg"
@@ -207,7 +206,7 @@ function Homepage() {
                                 class="btn btn-light fw-bold"
                                 type="button"
                               >
-                                {row?.group.name}
+                                {row?.name}
                               </button>
                             </div>
                           </Card.Footer>

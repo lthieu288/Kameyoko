@@ -29,13 +29,15 @@ import {
   sendEmail,
   kickOff,
 } from "../services/GroupService";
+import {getGroupsManage} from "../services/auth";
 
-function GroupDetail(props) {
+function GroupDetail() {
   const navigate = useNavigate();
   const [groupData, setGroupData] = useState();
   const [member, setMember] = useState(null);
   const [render, setRender] = useState(false);
   const [email, setEmail] = useState("");
+  const [groupPresInfo,setGroupPresInfo] = useState()
   const id = useParams();
   const host = "http://localhost:3000";
   const userInfo = JSON.parse(localStorage.getItem("currentUser"));
@@ -49,11 +51,22 @@ function GroupDetail(props) {
       setGroupData(res.group_data);
       setLink(host + "/join-group/" + res.group_data?.id);
     });
+    getGroupsManage(userInfo?.token).then((data)=>{
+      let obj = null;
+      for (let i = 0; i < data.groups_data?.length; i++) {
+        obj = data.groups_data[i];
+        if(obj.id.toString() === id?.id.toString()){
+          if(obj.group_pres_info !== undefined){
+            console.log(obj.group_pres_info)
+            setGroupPresInfo(obj.group_pres_info)
+          }
+        }
+      }
+    });
     getListMember(userInfo?.token, id?.id).then((res) => {
       setMember(res.groups_data);
     });
-  }, [render]);
-
+  }, [render,]);
   function isValidEmail(email) {
     return /\S+@\S+\.\S+/.test(email);
   }
@@ -225,17 +238,17 @@ function GroupDetail(props) {
                   }}
                 />
                 {
-                  props.code !== undefined ?
+                  groupPresInfo !== undefined ?
                       <>
                         <hr />
                         <TextField
                             placeholder="abc@gmail.com"
-                            label="Invite via email"
-                            value="code"
+                            label="Slide is being shown"
+                            value={groupPresInfo.pres_id}
                             fullWidth
                             InputProps={{
                               endAdornment: (
-                                  <ArrowForwardIosIcon position="start" onClick={()=> console.log("click")}>
+                                  <ArrowForwardIosIcon position="start" onClick={()=> {navigate("/presentation/group/" + id.id +"/"+groupPresInfo.pres_id)}}>
                                   </ArrowForwardIosIcon>
                               ),
                             }}
@@ -244,6 +257,7 @@ function GroupDetail(props) {
                       :
                       ""
                 }
+
 
               </div>
               <TableContainer

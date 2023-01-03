@@ -80,6 +80,19 @@ export async function getGroups(token) {
   return response.json();
 }
 
+export async function getGroupsManage(token) {
+    const response = await fetch(
+        "http://localhost:7777/api/v1/accounts/manage-groups",
+        {
+            headers: {
+                Authorization: token,
+                "Content-type": "application/json; charset=UTF-8",
+            },
+        }
+    );
+    return response.json();
+}
+
 export async function ediUserRoleGroup(token, idGroup, idUser, idRole) {
   const response = await fetch(
     "http://localhost:7777/api/v1/group/" +
