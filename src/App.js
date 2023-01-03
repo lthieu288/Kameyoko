@@ -13,6 +13,8 @@ import ViewForTheHost from "./Pages/Viewforthehost";
 import ChoiceQuestion from "./Pages/ChoiceQuestion";
 import Result from "./Pages/Result";
 import Chat from "./Pages/Chat";
+import ResultPublic from "./Pages/ResultPublic";
+import Question from "./components/Question";
 function App() {
   return (
     <>
@@ -23,17 +25,18 @@ function App() {
           <Route index element={<HomePage />} />
           <Route exact path="/" element={<HomePage />} />
           <Route path="/group/:id" element={<GroupDetail />} />
-
           <Route path="/presentation" element={<Presentation />} />
           <Route path="/presentation/:id" element={<Slide />} />
           <Route path="/view-host" element={<ViewForTheHost />} />
           <Route path="/result/:id" element={<Result />} />
+          <Route path="/result/public/:id" element={<ResultPublic />} />
           <Route path="/presentation/public/:id" element={<ChoiceQuestion />} />
           <Route path="/profile" element={<EditProfile />} />
           <Route exact path="/create-group" element={<CreateGroup />} />
           <Route path="/join-group/:id" element={<JoinGroup />} />
           <Route path="*" element={<p>There's nothing here: 404!</p>} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/question" element={<Question />} />
         </Routes>
       </Router>
     </>

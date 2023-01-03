@@ -1,92 +1,110 @@
-import { TextField } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { InputAdornment, TextField } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
+import React, { useEffect, useState, useRef } from "react";
 import * as SockJS from "sockjs-client";
 import * as Stomp from "stompjs";
-import { getMessage } from "../services/ChatService";
-const SOCKET_URL = "http://localhost:8080/ws-message";
+import { getMessage, sendMessage } from "../services/ChatService";
 
 let stompClient = null;
-function Chat() {
+
+function Chat(props) {
   const [message, setMessage] = useState([]);
+  const [text, setText] = useState("");
   const user = JSON.parse(localStorage.getItem("currentUser"));
-  const [render, setRender] = useState(true);
   const [offset, setOffset] = useState(0);
-  const presentId = 20;
+  const messagesEndRef = useRef(null);
+  const presentId = props.id;
 
   useEffect(() => {
     connect();
+
     getMessage(presentId, 0).then((res) => {
-      setMessage(res);
-      setOffset(0);
+      console.log(res);
+      if (res.response?.status !== 400) {
+        setMessage(res);
+        setOffset(0);
+      }
     });
-  }, [render]);
+  }, []);
+
+  // useEffect(() => {
+  //   scrollToBottom();
+  // }, [message]);
+
+  // const scrollToBottom = () => {
+  //   messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  // };
 
   const connect = () => {
     let Sock = new SockJS("http://localhost:8080/ws");
     stompClient = Stomp.over(Sock);
     stompClient.connect({}, onConnected, onError);
+    stompClient.debug = null;
   };
 
   const onConnected = () => {
-    stompClient.subscribe("/topic/chat/20", onPrivateMessage);
+    stompClient.subscribe("/topic/chat/" + presentId, onPrivateMessage);
   };
 
   const onPrivateMessage = (payload) => {
+    console.log(payload);
     setMessage(JSON.parse(payload.body));
-
-    setRender(!render);
   };
 
   const onError = (err) => {
     console.log(err);
   };
 
-  const handleClick = () => {
-    stompClient.send("/app/sendMessage", {}, render);
-  };
-
   const handleScroll = (event) => {
     let element = event.target;
     if (element.scrollTop === 0) {
       getMessage(presentId, offset + 1).then((res) => {
-        console.log(res);
-        const arr = message.concat(res);
-        setMessage(arr);
-        setOffset(offset + 1);
+        if (res.length === 0) {
+          setOffset(0);
+        } else {
+          const arr = message.concat(res);
+          setMessage(arr);
+          setOffset(offset + 1);
+        }
       });
     }
   };
 
-  const reversed = message.slice().reverse();
+  const handleClick = () => {
+    sendMessage(presentId, user.user.id, text, user.user.username);
+    setText("");
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      sendMessage(presentId, user.user.id, text, user.user.username);
+      setText("");
+    }
+  };
+
+  const reversed = Array.isArray(message) ? message.slice().reverse() : message;
   return (
     <>
       <section>
-        <div
-          class="container py-5"
-          style={{ backgroundColor: "#eee", width: "800px" }}
-        >
+        <div style={{ backgroundColor: "#eee", width: "100%" }}>
           <div class="row d-flex justify-content-center">
-            <div class="col-md-10 col-lg-8 col-xl-6">
+            <div>
               <div class="card" id="chat2">
-                <div class="card-header d-flex justify-content-between align-items-center p-3">
-                  <h5 class="mb-0">Chat</h5>
-                  <button
-                    type="button"
-                    class="btn btn-primary btn-sm"
-                    data-mdb-ripple-color="dark"
-                  >
-                    Let's Chat App
-                  </button>
+                <div class="card-header align-items-center p-2 bg-primary text-white">
+                  <h5 class="mb-0 fw-bold text-center">Chat</h5>
                 </div>
                 <div
                   class="card-body"
                   data-mdb-perfect-scrollbar="true"
-                  style={{ height: "70vh", overflowY: "auto" }}
+                  style={{ height: "50vh", overflowY: "auto" }}
                   onScroll={handleScroll}
                 >
                   {reversed?.map((row, index) =>
-                    user.user.id !== row.userId ? (
-                      <div class="d-flex flex-row justify-content-start mb-4">
+                    user?.user.id !== row.userId ? (
+                      <div
+                        key={index}
+                        class="d-flex flex-row justify-content-start mb-4"
+                      >
                         <img
                           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBGwlAahaapmmJ7Riv_L_ZujOcfWSUJnm71g&usqp=CAU"
                           alt="avatar 1"
@@ -109,7 +127,10 @@ function Chat() {
                         </div>
                       </div>
                     ) : (
-                      <div class="d-flex flex-row justify-content-end mb-4">
+                      <div
+                        key={index}
+                        class="d-flex flex-row justify-content-end mb-4"
+                      >
                         <div>
                           <p class="small p-2 me-3 mb-0 text-white rounded-3 bg-primary">
                             {row.message}
@@ -127,12 +148,30 @@ function Chat() {
                     )
                   )}
                 </div>
+                <div ref={messagesEndRef} />
                 <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
-                  <input
+                  <TextField
+                    onChange={(e) => {
+                      setText(e.target.value);
+                    }}
+                    onKeyDown={handleKeyPress}
+                    label="Type message"
+                    value={text}
                     type="text"
-                    class="form-control form-control-lg"
-                    id="exampleFormControlInput1"
-                    placeholder="Type message"
+                    fullWidth
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment
+                          position="end"
+                          style={{ cursor: "pointer" }}
+                        >
+                          <SendIcon
+                            style={{ color: "blue" }}
+                            onClick={handleClick}
+                          />
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </div>
               </div>

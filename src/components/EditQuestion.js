@@ -20,14 +20,6 @@ import Heading from "./Heading";
 import EditParagraphQuestion from "./EditParagraphQuestion";
 import EditHeadingQuestion from "./EditHeadingQuestion";
 
-let createSlide = {
-    "type": 1, "content": {
-        "title": "",
-        "meta": "your meta",
-        "options": []
-    }
-}
-
 function EditQuestion(props) {
 
     const callFunctionRender = () => {
@@ -41,10 +33,10 @@ function EditQuestion(props) {
                         <Slide data={props?.options} id={props.id} check={false}/>
                         :
                         props.typeSlide === 9 ?
-                            <Paragraph paragraph={"hey hey hey"}/>
+                            <Paragraph  paragraph={props?.content}/>
                             :
                             <h2>
-                                <Heading heading={"hey hey hey"}/>
+                                <Heading heading={props?.content}/>
                             </h2>
                 }
             </div>

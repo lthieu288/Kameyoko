@@ -15,3 +15,28 @@ export async function getMessage(id, offset) {
     });
   return response;
 }
+
+export async function sendMessage(presentId, userId, message, username) {
+  const response = await request
+    .post(
+      "chat/send",
+      {
+        presentId,
+        userId,
+        message,
+        username,
+      },
+      {
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }
+    )
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      return error;
+    });
+  return response;
+}
