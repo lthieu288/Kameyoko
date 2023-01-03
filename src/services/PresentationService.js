@@ -74,7 +74,9 @@ export async function getSlidesPresentation(token, id) {
 
 export async function createSlides(body, token, id) {
   const response = await fetch(
-    "http://localhost:7777/api/v1/presentation/" + id + "/slide/create",
+    "https://kameyoko.up.railway.app/api/v1/presentation/" +
+      id +
+      "/slide/create",
     {
       method: "POST",
       headers: {
@@ -89,7 +91,7 @@ export async function createSlides(body, token, id) {
 }
 export async function updateSlide(body, token, idPre, idSlide, idContent) {
   const response = await fetch(
-    "http://localhost:7777/api/v1/presentation/" +
+    "https://kameyoko.up.railway.app/api/v1/presentation/" +
       idPre +
       "/slide/" +
       idSlide +

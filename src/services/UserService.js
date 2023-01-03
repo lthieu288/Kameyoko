@@ -37,7 +37,7 @@ export async function postVote(token, idPre, idCont, idOpt) {
 
 export async function forgetPassword(email) {
   const response = await fetch(
-    "http://localhost:7777/api/v1/auth/forgot-password",
+    "https://kameyoko.up.railway.app/api/v1/auth/forgot-password",
     {
       method: "GET",
       headers: {

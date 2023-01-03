@@ -15,7 +15,7 @@ import {
   TextField,
   InputAdornment,
 } from "@mui/material";
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 import Swal from "sweetalert2";
 import { AccountCircle, MoreHoriz, GroupAdd } from "@mui/icons-material";
@@ -224,27 +224,27 @@ function GroupDetail(props) {
                     ),
                   }}
                 />
-                {
-                  props.code !== undefined ?
-                      <>
-                        <hr />
-                        <TextField
-                            placeholder="abc@gmail.com"
-                            label="Invite via email"
-                            value="code"
-                            fullWidth
-                            InputProps={{
-                              endAdornment: (
-                                  <ArrowForwardIosIcon position="start" onClick={()=> console.log("click")}>
-                                  </ArrowForwardIosIcon>
-                              ),
-                            }}
-                        />
-                      </>
-                      :
-                      ""
-                }
-
+                {props.code !== undefined ? (
+                  <>
+                    <hr />
+                    <TextField
+                      placeholder="abc@gmail.com"
+                      label="Invite via email"
+                      value="code"
+                      fullWidth
+                      InputProps={{
+                        endAdornment: (
+                          <ArrowForwardIosIcon
+                            position="start"
+                            onClick={() => console.log("click")}
+                          ></ArrowForwardIosIcon>
+                        ),
+                      }}
+                    />
+                  </>
+                ) : (
+                  ""
+                )}
               </div>
               <TableContainer
                 className="col-9 mx-3"
