@@ -29,7 +29,7 @@ import {
   sendEmail,
   kickOff,
 } from "../services/GroupService";
-import {getGroupsManage} from "../services/auth";
+import {getGroupsJoinedGroup, getGroupsManage} from "../services/auth";
 
 function GroupDetail() {
   const navigate = useNavigate();
@@ -58,6 +58,17 @@ function GroupDetail() {
         if(obj.id.toString() === id?.id.toString()){
           if(obj.group_pres_info !== undefined){
             console.log(obj.group_pres_info)
+            setGroupPresInfo(obj.group_pres_info)
+          }
+        }
+      }
+    });
+    getGroupsJoinedGroup(userInfo?.token).then((data)=>{
+      let obj = null;
+      for (let i = 0; i < data?.groups_data?.length; i++) {
+        obj = data.groups_data[i].group;
+        if(obj.id.toString() === id?.id.toString()){
+          if(obj.group_pres_info !== undefined){
             setGroupPresInfo(obj.group_pres_info)
           }
         }

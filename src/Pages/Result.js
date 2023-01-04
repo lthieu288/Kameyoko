@@ -39,7 +39,7 @@ function Result() {
               socket.send(res.data.slides[0].id)
               socket.onmessage = (msg) => {
                 setListSlideSocket(JSON.parse(msg.data));
-                console.log(JSON.parse(msg.data))
+                  console.log(msg)
               };
             };
           }

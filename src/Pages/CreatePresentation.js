@@ -116,13 +116,13 @@ const CreatePresentation = () => {
             </button>
             <div className="form-outline d-flex">
               <Dropdown>
-                <Dropdown.Toggle variant="light" style={{backgroundColor:"#0d6efd"}}>
+                <Dropdown.Toggle variant="light" style={{backgroundColor:"#0d6efd" }}>
                   <PlayCircleOutline
                       style={{ marginRight: "5px" }}
                   ></PlayCircleOutline>
                   Present
                 </Dropdown.Toggle>
-                <Dropdown.Menu>
+                <Dropdown.Menu >
                   <Dropdown.Item    onClick={() => {
                     window.open("/result/public/" + id, "_blank");
                   }}>

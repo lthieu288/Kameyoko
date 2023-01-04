@@ -92,6 +92,18 @@ export async function getGroupsManage(token) {
     );
     return response.json();
 }
+export async function getGroupsJoinedGroup(token) {
+    const response = await fetch(
+        "http://localhost:7777/api/v1/accounts/joined-groups",
+        {
+            headers: {
+                Authorization: token,
+                "Content-type": "application/json; charset=UTF-8",
+            },
+        }
+    );
+    return response.json();
+}
 
 export async function ediUserRoleGroup(token, idGroup, idUser, idRole) {
   const response = await fetch(
