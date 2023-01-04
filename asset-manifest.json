@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Kameyoko/static/css/main.90a6bf0d.css",
+    "main.js": "/Kameyoko/static/js/main.c57ec6b1.js",
+    "static/js/787.07bc5f8f.chunk.js": "/Kameyoko/static/js/787.07bc5f8f.chunk.js",
+    "index.html": "/Kameyoko/index.html",
+    "main.90a6bf0d.css.map": "/Kameyoko/static/css/main.90a6bf0d.css.map",
+    "main.c57ec6b1.js.map": "/Kameyoko/static/js/main.c57ec6b1.js.map",
+    "787.07bc5f8f.chunk.js.map": "/Kameyoko/static/js/787.07bc5f8f.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.90a6bf0d.css",
+    "static/js/main.c57ec6b1.js"
+  ]
+}
