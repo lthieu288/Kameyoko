@@ -6,6 +6,8 @@ import ButtonComponent from "../components/ButtonComponent";
 import { Container } from "react-bootstrap";
 import Chat from "./Chat";
 import Question from "../components/Question";
+import {getPresentation} from "../services/PresentationService";
+import CloseButton from "react-bootstrap/CloseButton";
 
 function Result() {
   const [number, setNumber] = useState(0);
@@ -14,49 +16,55 @@ function Result() {
   const params = useParams();
   const [listSlide, setListSlide] = useState([]);
   const [listSlideSocket, setListSlideSocket] = useState([]);
-  const [checkNextDisable, setCheckNextDisable] = useState(false);
-  const [checkPrevDisable, setCheckPrevDisable] = useState(false);
+  const [checkNextDisable, setCheckNextDisable] = useState(false)
+  const [checkPrevDisable, setCheckPrevDisable] = useState(false)
   useEffect(() => {
     if (!userInfo) {
-      navigate("/login?redirect=result/" + params.id);
+      navigate("/login?redirect=result/public/" + params.id);
     }
-    setCheckPrevDisable(true);
-    async function getAPIListSlide() {
-      return await getListSlide(userInfo.token, params.id).then((res) => {
-        setListSlide(res.data.slides);
-        if (1 === res.data.slides.length) {
-          setCheckNextDisable(true);
+    setCheckPrevDisable(true)
+    getPresentation(userInfo.token,  params.id).then((response) =>{
+        if (response.data !== null){
+          if (response.data.data.owner.id.toString() !==  userInfo.user.id.toString()) {
+            navigate("/login?redirect=result/public/" + params.id);
+          }
         }
-        let socket = new WebSocket(
-          `ws://localhost:7777/ws?presId=${params.id}`
-        );
-        socket.onopen = function () {
-          socket.send(res.data.slides[0].id);
-          socket.onmessage = (msg) => {
-            setListSlideSocket(JSON.parse(msg.data));
-          };
-        };
       });
-    }
-    getAPIListSlide();
+    getListSlide(userInfo.token, params.id).then(
+          (res) => {
+            setListSlide(res.data.slides);
+            if(1 === res.data.slides.length){
+              setCheckNextDisable(true)
+            }
+            let socket = new WebSocket(`ws://localhost:7777/ws?presId=${params.id}`);
+            socket.onopen = function () {
+              socket.send(res.data.slides[0].id)
+              socket.onmessage = (msg) => {
+                setListSlideSocket(JSON.parse(msg.data));
+                  console.log(msg)
+              };
+            };
+          }
+      );
+
   }, []);
 
-  function nextButton() {
-    setCheckPrevDisable(false);
-    const num = number + 1;
+  const nextButton = ()=> {
+    setCheckPrevDisable(false)
+    const num = (number + 1);
     setNumber(number + 1);
-    if (listSlide[num].id !== undefined) {
+    if(listSlide[num].id !== undefined) {
       let socket = new WebSocket(`ws://localhost:7777/ws?presId=${params.id}`);
       socket.onopen = function () {
-        socket.send(listSlide[num].id);
+        socket.send(listSlide[num].id)
         socket.onmessage = (msg) => {
           setListSlideSocket(JSON.parse(msg.data));
         };
       };
     }
-    if (num + 1 === listSlide.length) {
-      setCheckNextDisable(true);
-      setCheckPrevDisable(false);
+    if(num +1 === listSlide.length){
+      setCheckNextDisable(true)
+      setCheckPrevDisable(false)
     }
   }
   const prevButton = () => {
@@ -77,12 +85,21 @@ function Result() {
       setCheckNextDisable(false);
     }
   };
+  const leaveShowSlide = () => {
+    let socket = new WebSocket(`ws://localhost:7777/ws?presId=${params.id}`);
+      socket.onopen = function () {
+        socket.send("123456")
+        socket.onmessage = (msg) => {
+          setListSlideSocket(JSON.parse(msg.data));
+          console.log(JSON.parse(msg.data))
+        };
+      };
+  };
 
   return (
     <div>
-      <div
-        style={{ textAlign: "center", fontSize: "25px", fontWeight: "regular" }}
-      >
+      <CloseButton className="button-cancel" onClick={()=>{leaveShowSlide()}} />
+      <div style={{textAlign:"center" , fontSize:"25px" , fontWeight:"regular"}}>
         <div>
           Go to
           <span className="fw-bold" style={{ marginLeft: "10px" }}>
@@ -99,6 +116,10 @@ function Result() {
           </span>
         </div>
       </div>
+      <Slide2 token={userInfo?.token} id={params.id} listSlide={listSlideSocket}/>
+      <Container style={{ marginTop: "20px",textAlign: "center" }}>
+        <ButtonComponent name={"Prev"} parentPrevClick={prevButton} disable={checkPrevDisable}/>
+        <ButtonComponent name={"Next"} parentNextClick={nextButton} disable={checkNextDisable}/>
 
       <div className="p-3" style={{ width: "100%" }}>
         <div className="row">
@@ -126,9 +147,7 @@ function Result() {
           disable={checkNextDisable}
         />
       </Container>
-      <div className="row px-3">
-        <Question id={params.id} role="owner"></Question>
-      </div>
+      </Container>
     </div>
   );
 }

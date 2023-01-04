@@ -43,6 +43,7 @@ function CreateMultipleQuestion(props) {
                     title: "Create Slide successfully",
                     showConfirmButton: false,
                 });
+                props.parentRender(true);
             } else {
                 Swal.fire({
                     icon: "error",
