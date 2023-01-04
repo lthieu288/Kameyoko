@@ -36,7 +36,7 @@ function Result() {
             if(1 === res.data.slides.length){
               setCheckNextDisable(true)
             }
-            let socket = new WebSocket(`ws://localhost:7777/ws?presId=${params.id}`);
+            let socket = new WebSocket(`ws://kameyoko.up.railway.app/ws?presId=${params.id}`);
             socket.onopen = function () {
               socket.send(res.data.slides[0].id)
               socket.onmessage = (msg) => {
@@ -54,7 +54,7 @@ function Result() {
     const num = (number + 1);
     setNumber(number + 1);
     if(listSlide[num].id !== undefined) {
-      let socket = new WebSocket(`ws://localhost:7777/ws?presId=${params.id}`);
+      let socket = new WebSocket(`ws://kameyoko.up.railway.app/ws?presId=${params.id}`);
       socket.onopen = function () {
         socket.send(listSlide[num].id)
         socket.onmessage = (msg) => {
@@ -72,7 +72,7 @@ function Result() {
     const numPrev = number - 1;
     setNumber(number - 1);
     if (listSlide[numPrev].id !== undefined) {
-      let socket = new WebSocket(`ws://localhost:7777/ws?presId=${params.id}`);
+      let socket = new WebSocket(`ws://kameyoko.up.railway.app/ws?presId=${params.id}`);
       socket.onopen = function () {
         socket.send(listSlide[numPrev].id);
         socket.onmessage = (msg) => {
@@ -86,7 +86,7 @@ function Result() {
     }
   };
   const leaveShowSlide = () => {
-    let socket = new WebSocket(`ws://localhost:7777/ws?presId=${params.id}`);
+    let socket = new WebSocket(`ws://kameyoko.up.railway.app/ws?presId=${params.id}`);
       socket.onopen = function () {
         socket.send("123456")
         socket.onmessage = (msg) => {
@@ -116,11 +116,6 @@ function Result() {
           </span>
         </div>
       </div>
-      <Slide2 token={userInfo?.token} id={params.id} listSlide={listSlideSocket}/>
-      <Container style={{ marginTop: "20px",textAlign: "center" }}>
-        <ButtonComponent name={"Prev"} parentPrevClick={prevButton} disable={checkPrevDisable}/>
-        <ButtonComponent name={"Next"} parentNextClick={nextButton} disable={checkNextDisable}/>
-
       <div className="p-3" style={{ width: "100%" }}>
         <div className="row">
           <div className="col-9">
@@ -146,7 +141,6 @@ function Result() {
           parentNextClick={nextButton}
           disable={checkNextDisable}
         />
-      </Container>
       </Container>
     </div>
   );
