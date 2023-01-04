@@ -36,7 +36,7 @@ function Chat(props) {
   // };
 
   const connect = () => {
-    let Sock = new SockJS("http://localhost:8080/ws");
+    let Sock = new SockJS("https://kameyoko-api-production.up.railway.app/ws");
     stompClient = Stomp.over(Sock);
     stompClient.connect({}, onConnected, onError);
     stompClient.debug = null;
