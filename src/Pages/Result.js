@@ -142,6 +142,9 @@ function Result() {
           disable={checkNextDisable}
         />
       </Container>
+      <div className="row py-5">
+        <Question id={params.id} role="owner" style={{padding:"20px"}}></Question>
+      </div>
     </div>
   );
 }

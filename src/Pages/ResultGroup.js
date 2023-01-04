@@ -5,8 +5,12 @@ import {getListSlide} from "../services/UserService";
 import ButtonComponent from "../components/ButtonComponent";
 import {Container} from "react-bootstrap";
 import {getPresentation} from "../services/PresentationService";
+import Chat from "./Chat";
+import Question from "../components/Question";
 
-function ResultGroup() {
+function ResultGroup(props) {
+    console.log("ResultGroup")
+    console.log(props.role)
     const navigate = useNavigate();
     const userInfo = JSON.parse(localStorage.getItem("currentUser"));
     const params = useParams();
@@ -91,11 +95,28 @@ function ResultGroup() {
 
     return (
         <div>
-            <Slide2 token={userInfo?.token} id={params.id} listSlide={listSlideSocket}/>
+            <div className="p-3" style={{ width: "100%" }}>
+                <div className="row">
+                    <div className="col-9">
+                        <Slide2 token={userInfo?.token} id={params.id} listSlide={listSlideSocket}/>
+                    </div>
+                    <div className="col-3">
+                        <Chat id={params.id}></Chat>
+                    </div>
+                </div>
+            </div>
             <Container style={{ marginTop: "20px",textAlign: "center" }}>
                 <ButtonComponent name={"Prev"} parentPrevClick={prevButton} disable={checkPrevDisable}/>
                 <ButtonComponent name={"Next"} parentNextClick={nextButton} disable={checkNextDisable}/>
             </Container>
+            <div className="row py-5">
+                {
+                    props?.role === undefined?
+                        <Question id={params.id} role="owner"></Question>
+                        :
+                        <Question id={params.id} role={props.role}></Question>
+                }
+            </div>
         </div>
     );
 }

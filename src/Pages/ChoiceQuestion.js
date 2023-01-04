@@ -7,8 +7,11 @@ import Paragraph from "../components/Paragraph";
 import Heading from "../components/Heading";
 import Slide from "../components/Slide";
 import CloseButton from "react-bootstrap/CloseButton";
+import Slide2 from "../components/Slide2";
+import Chat from "./Chat";
+import Question from "../components/Question";
 
-export default function ChoiceQuestion() {
+export default function ChoiceQuestion(props) {
   const navigate = useNavigate();
   const userInfo = JSON.parse(localStorage.getItem("currentUser"));
   const [listSlide, setListSlide] = useState([]);
@@ -97,10 +100,10 @@ export default function ChoiceQuestion() {
                 type === 1 ?
                     <>
                         <div className="row">
-                            <div className="col-6">
+                            <div className="col-4">
                                 <Slide data={contentSlide?.options} check={false}/>
                             </div>
-                            <div className="col-6">
+                            <div className="col-5">
                                 <Container
                                     className="multiple-choice"
                                     style={{ width: "55%", marginTop: "35px" }}
@@ -147,19 +150,38 @@ export default function ChoiceQuestion() {
                                     </div>
                                 </Container>
                             </div>
+                            <div className="col-3">
+                                <Chat id={params.id}></Chat>
+                            </div>
                         </div>
                     </>
                     :
                     type === 9 ?
-                        <Paragraph  paragraph={contentSlide}/>
+                        <div className="row">
+                            <div className="col-9">
+                                <Paragraph  paragraph={contentSlide}/>
+                            </div>
+                            <div className="col-3">
+                                <Chat id={params.id}></Chat>
+                            </div>
+                        </div>
                         :
-                        <h2>
-                            <Heading heading={contentSlide}/>
-                        </h2>
+                        <div className="row">
+                            <div className="col-9">
+                                <Heading heading={contentSlide}/>
+                            </div>
+                            <div className="col-3">
+                                <Chat id={params.id}></Chat>
+                            </div>
+                        </div>
+
 
             }
         </div>
       </Container>
+        <div className="row py-5" style={{marginTop:"20px"}}>
+            <Question id={params.id} role="member"></Question>
+        </div>
       {/*<Container style={{ marginTop: "20px", textAlign: "center" }}>*/}
       {/*  <ButtonComponent name={"Prev"} parentPrevClick={handleClickPrev} disable={checkPrevDisable}/>*/}
       {/*  <ButtonComponent name={"Next"} parentNextClick={handleClickNext} disable={checkNextDisable}/>*/}

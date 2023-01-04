@@ -31,11 +31,11 @@ function PresentationGroup(props) {
           {
               roleUser === "member" ?
                   <>
-                      <ChoiceQuestion/>
+                      <ChoiceQuestion role={roleUser}/>
                   </>
                   :
                   <>
-                      <ResultGroup/>
+                      <ResultGroup role={roleUser}/>
                   </>
 
           }
