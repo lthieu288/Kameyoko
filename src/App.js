@@ -41,7 +41,7 @@ function App() {
           <Route path="/profile" element={<EditProfile />} />
           <Route exact path="/create-group" element={<CreateGroup />} />
           <Route path="/join-group/:id" element={<JoinGroup />} />
-          {/* <Route path="*" element={<p>There's nothing here: 404!</p>} /> */}
+          <Route path="*" element={<p>There's nothing here: 404!</p>} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/question" element={<Question />} />
         </Routes>
