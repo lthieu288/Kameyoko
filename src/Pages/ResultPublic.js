@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Slide2 from "../components/Slide2";
 import { useNavigate, useParams } from "react-router-dom";
 import { getListSlide } from "../services/UserService";
