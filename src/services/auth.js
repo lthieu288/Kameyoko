@@ -46,7 +46,7 @@ export async function editProfile(token, userEdit) {
   const response = await fetch(
     "https://kameyoko.up.railway.app/api/v1/accounts/edit",
       {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
         Authorization: token,
@@ -54,6 +54,7 @@ export async function editProfile(token, userEdit) {
       body: JSON.stringify(userEdit),
     }
   );
+  console.log(JSON.stringify(userEdit))
   if (response.status === 204) return response;
   else return response.json();
 }

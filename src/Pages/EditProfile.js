@@ -51,6 +51,7 @@ function EditProfile() {
   function ProfileUser() {
     getProfile(currentUser?.token).then((data) => {
       setUser(data.user);
+      console.log(data.user)
       setImage(data.user.profile_img);
       setLoading(false);
     });
@@ -65,10 +66,11 @@ function EditProfile() {
 
   const handleSubmitEditProfile = async (data) => {
     let editUser = {
-      full_name: data.full_name,
-      username: data.username,
-      profile_img: image,
+      "full_name": data.full_name,
+      "username": data.username,
+      "profile_img": image === undefined ? "": image,
     };
+    console.log(editUser)
     editProfile(currentUser.token, editUser).then((response) => {
       console.log(response);
       if (response.status === 204) {
@@ -201,7 +203,7 @@ function EditProfile() {
                         id="inputFirstName"
                         type="text"
                         placeholder="Enter your first name"
-                        defaultValue="Valerie"
+                        defaultValue={user?.username}
                         {...register("username")}
                       />
                       <p className="error" style={{ color: "red" }}>
@@ -224,16 +226,22 @@ function EditProfile() {
                     <Button variant="outline-primary" type="submit" style={{}}>
                       Save
                     </Button>
-                    <Button
-                        variant="outline-primary"
-                        type="submit"
-                        style={{ marginLeft:"30px", backgroundColor:"red" , color:"black"}}
-                        onClick={() => {
-                          setShowCreate(true);
-                        }}
-                    >
-                      Change Password
-                    </Button>
+                    {
+                      currentUser.user.is_social === true ?
+                          <></>
+                          :
+                          <Button
+                              variant="outline-primary"
+                              type="submit"
+                              style={{ marginLeft:"30px", backgroundColor:"red" , color:"black"}}
+                              onClick={() => {
+                                setShowCreate(true);
+                              }}
+                          >
+                            Change Password
+                          </Button>
+
+                    }
                   </form>
                 </div>
               </div>

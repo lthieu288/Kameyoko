@@ -3,14 +3,15 @@ import TextField from "@mui/material/TextField";
 import { Link, useNavigate } from "react-router-dom";
 import { Modal } from "react-bootstrap";
 import Swal from "sweetalert2";
-import { GoogleLogin } from "react-google-login";
+import { GoogleLogin } from "@leecheuk/react-google-login";
 import { loginUser, useAuthDispatch } from "../Context";
 import { gapi } from "gapi-script";
 import { forgetPassword } from "../services/UserService";
+import request from "../utils/request";
 
-// const clientId = "768128998994-6ltvdfgdgotov36pbbmqmv4apvjfsor5.apps.googleusercontent.com";
-const clientId =
-  "12369507363-douqeq9o9pqaf40i4ij4rk1fql17t9nt.apps.googleusercontent.com";
+// const clientId =
+//   "12369507363-douqeq9o9pqaf40i4ij4rk1fql17t9nt.apps.googleusercontent.com";
+const clientId = '768128998994-6ltvdfgdgotov36pbbmqmv4apvjfsor5.apps.googleusercontent.com';
 function Login() {
   const dispatch = useAuthDispatch();
   const [email, setEmail] = useState("");
@@ -28,7 +29,37 @@ function Login() {
     }
   }
   const onSuccess = (res) => {
-    console.log("[Login Success] tokenUser: ", res.tokenId);
+    const userInfo = {
+      username: res.profileObj.givenName,
+      password:  Math.random().toString(36).slice(-8),
+      email: res.profileObj.email,
+      fullname: res.profileObj.name,
+      is_social:true
+    };
+    async function getPost() {
+      await request
+          .post("auth/register", userInfo)
+          .then((res) => {
+            console.log(res);
+            localStorage.setItem("currentUser", JSON.stringify(res.data));
+            Swal.fire({
+              icon: "success",
+              title: "Register successfully",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+            navigate("/")
+          })
+          .catch((error) => {
+            console.log(error.response.data.message);
+            Swal.fire({
+              icon: "error",
+              title: "Invalid your email",
+              text: "Check your information again, please",
+            });
+          });
+    }
+    getPost();
   };
 
   const onFailure = (res) => {
@@ -128,38 +159,15 @@ function Login() {
                     </div>
                     <hr className="my-4" />
                     <div className="form-outline mb-4 d-flex justify-content-center">
-                        <a
-                            className="button button-login-with-gg"
-                            href="http://localhost:7777/api/v1/oauth/google/login"
-                            style={{
-                              backgroundColor: "rgb(255, 255, 255)",
-                              display: "inline-flex",
-                              alignItems: "center",
-                              color: "rgba(0, 0, 0, 0.54)",
-                              boxShadow: "rgb(0 0 0 / 24%) 0px 2px 2px 0px, rgb(0 0 0 / 24%) 0px 0px 1px 0px",
-                              padding: "3px",
-                              borderRadius: "4px",
-                              border: "1px solid transparent",
-                              paddingRight:"10px",
-                              fontSize: "14px",
-                              fontWeight: "500",
-                              fontFamily: "Roboto, sans-serif"}}
-                        >
-                          <div className="left">
-                            <img
-                                style={{
-                                  width:"18px",
-                                  height:"18px",
-                                  margin:"8px",
-                                  background: "rgb(255, 255, 255)",
-                                  borderRadius: "2px"}}
-                                width="30px"
-                                alt='Google "G" Logo'
-                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
-                            />
-                          </div>
-                          Sign in with Google
-                        </a>
+                      <GoogleLogin
+                          variant="outlined"
+                          color="error"
+                          clientId={clientId}
+                          onSuccess={onSuccess}
+                          onFailure={onFailure}
+                          cookiePolicy={'single_host_origin'}
+                      >
+                      </GoogleLogin>
                     </div>
                     <div className="d-flex justify-content-center">
                       <p className="mb-0 text-black center text-muted">
