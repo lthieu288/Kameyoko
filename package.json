@@ -1,4 +1,5 @@
 {
+  "homepage": "http://Kameyoko.github.io/Kameyoko",
   "name": "kameyoko",
   "version": "0.1.0",
   "private": true,
@@ -9,6 +10,7 @@
     "@hookform/resolvers": "^2.9.10",
     "@mui/icons-material": "^5.10.15",
     "@mui/material": "^5.10.15",
+    "@stomp/stompjs": "^6.1.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -17,6 +19,7 @@
     "date-fns": "^2.29.3",
     "eslint-plugin-react-hooks": "^4.6.0",
     "gapi-script": "^1.2.0",
+    "net": "^1.0.2",
     "react": "^18.2.0",
     "react-bootstrap": "^2.6.0",
     "react-bootstrap-sweetalert": "^5.2.0",
@@ -27,12 +30,16 @@
     "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",
     "recharts": "^2.1.16",
+    "sockjs-client": "^1.6.1",
+    "stompjs": "^2.3.3",
     "sweetalert": "^2.1.2",
     "sweetalert2": "^11.6.14",
     "web-vitals": "^2.1.4",
     "yup": "^0.32.11"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -55,5 +62,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^4.0.0"
   }
 }
