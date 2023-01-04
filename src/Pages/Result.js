@@ -116,11 +116,6 @@ function Result() {
           </span>
         </div>
       </div>
-      <Slide2 token={userInfo?.token} id={params.id} listSlide={listSlideSocket}/>
-      <Container style={{ marginTop: "20px",textAlign: "center" }}>
-        <ButtonComponent name={"Prev"} parentPrevClick={prevButton} disable={checkPrevDisable}/>
-        <ButtonComponent name={"Next"} parentNextClick={nextButton} disable={checkNextDisable}/>
-
       <div className="p-3" style={{ width: "100%" }}>
         <div className="row">
           <div className="col-9">
@@ -146,7 +141,6 @@ function Result() {
           parentNextClick={nextButton}
           disable={checkNextDisable}
         />
-      </Container>
       </Container>
     </div>
   );

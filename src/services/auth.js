@@ -30,8 +30,8 @@ export async function createGroup(body, token) {
 
 export async function getProfile(token) {
   const response = await fetch(
-    "https://kameyoko.up.railway.app/api/v1/accounts/profile",
-// " http://localhost:7777/api/v1/accounts/profile",
+    // "https://kameyoko.up.railway.app/api/v1/accounts/profile",
+" http://localhost:7777/api/v1/accounts/profile",
 {
       headers: {
         Authorization: token,
@@ -76,8 +76,8 @@ export async function editPassword(token, body) {
 
 export async function getGroups(token) {
   const response = await fetch(
-    "https://kameyoko.up.railway.app/api/v1/accounts/joined-groups",
-    //   "http://localhost:7777/api/v1/accounts/joined-groups",
+    // "https://kameyoko.up.railway.app/api/v1/accounts/joined-groups",
+      "http://localhost:7777/api/v1/accounts/joined-groups",
 
       {
       headers: {
@@ -91,8 +91,8 @@ export async function getGroups(token) {
 
 export async function getGroupsManage(token) {
     const response = await fetch(
-        "https://kameyoko.up.railway.app/api/v1/accounts/manage-groups",
-        // "http://localhost:7777/api/v1/accounts/manage-groups",
+        // "https://kameyoko.up.railway.app/api/v1/accounts/manage-groups",
+        "http://localhost:7777/api/v1/accounts/manage-groups",
         {
             headers: {
                 Authorization: token,
@@ -104,8 +104,8 @@ export async function getGroupsManage(token) {
 }
 export async function getGroupsJoinedGroup(token) {
     const response = await fetch(
-        // "http://localhost:7777/api/v1/accounts/joined-groups",
-        "https://kameyoko.up.railway.app/api/v1/accounts/joined-groups",
+        "http://localhost:7777/api/v1/accounts/joined-groups",
+        // "https://kameyoko.up.railway.app/api/v1/accounts/joined-groups",
         {
             headers: {
                 Authorization: token,

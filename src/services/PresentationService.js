@@ -106,8 +106,7 @@ export async function updateSlide(body, token, idPre, idSlide, idContent) {
 }
 export async function createShowPresentToGroup(body, token,id) {
   const response = await fetch(
-      "https://kameyoko.up.railway.app/api/v1/presentation/" + id + "/group-presentation",
-  // "http://localhost:7777/api/v1/presentation/" + id + "/group-presentation",
+      "http://localhost:7777/api/v1/presentation/" + id + "/group-presentation",
       {
         method: "POST",
         headers: {
