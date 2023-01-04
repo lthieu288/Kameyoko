@@ -16,7 +16,13 @@ export async function getMessage(id, offset) {
   return response;
 }
 
-export async function sendMessage(presentId, userId, message, username) {
+export async function sendMessage(
+  presentId,
+  userId,
+  message,
+  username,
+  groupId
+) {
   const response = await request
     .post(
       "chat/send",
@@ -25,6 +31,7 @@ export async function sendMessage(presentId, userId, message, username) {
         userId,
         message,
         username,
+        groupId,
       },
       {
         headers: {

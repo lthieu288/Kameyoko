@@ -3,14 +3,17 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "react-bootstrap/Button";
-import {getProfile, editProfile, editPassword} from "../services/auth";
+import { getProfile, editProfile, editPassword } from "../services/auth";
 import Swal from "sweetalert2";
 import Footer from "../components/Footer";
 import Navbar from "../components/ResponsiveAppBar";
 import { useNavigate } from "react-router-dom";
-import {Modal} from "react-bootstrap";
-import {TextField} from "@mui/material";
+import { Modal } from "react-bootstrap";
+import { TextField } from "@mui/material";
+import * as SockJS from "sockjs-client";
+import * as Stomp from "stompjs";
 
+let stompClient = null;
 function EditProfile() {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   const navigate = useNavigate();
@@ -18,9 +21,9 @@ function EditProfile() {
   const [image, setImage] = useState();
   const [loading, setLoading] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
-  const [oldPassword,setOldPassword] = useState("")
-  const [newPassword,setNewPassword] = useState("")
-  const [replacePass,setReplacePass] = useState("")
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [replacePass, setReplacePass] = useState("");
 
   const schema = yup.object().shape({
     username: yup.string().required("user name is required"),
@@ -51,7 +54,6 @@ function EditProfile() {
   function ProfileUser() {
     getProfile(currentUser?.token).then((data) => {
       setUser(data.user);
-      console.log(data.user)
       setImage(data.user.profile_img);
       setLoading(false);
     });
@@ -62,7 +64,30 @@ function EditProfile() {
     }
     setLoading(true);
     ProfileUser();
+    connect();
   }, [currentUser?.token]);
+
+  const connect = () => {
+    let Sock = new SockJS("https://kameyoko-api-production.up.railway.app/ws");
+    stompClient = Stomp.over(Sock);
+    stompClient.connect({}, onConnected, onError);
+    stompClient.debug = null;
+  };
+
+  const onConnected = () => {
+    stompClient.subscribe("/topic/chat/" + user.user.id, onPrivateMessage);
+  };
+
+  const onPrivateMessage = (payload) => {
+    Swal.fire({
+      icon: "info",
+      title: "New message: " + payload.body,
+    });
+  };
+
+  const onError = (err) => {
+    console.log(err);
+  };
 
   const handleSubmitEditProfile = async (data) => {
     let editUser = {
@@ -70,7 +95,6 @@ function EditProfile() {
       "username": data.username,
       "profile_img": image === undefined ? "": image,
     };
-    console.log(editUser)
     editProfile(currentUser.token, editUser).then((response) => {
       console.log(response);
       if (response.status === 204) {
@@ -89,18 +113,18 @@ function EditProfile() {
       }
     });
   };
-  const changePassword = async ()=>{
+  const changePassword = async () => {
     let changePass = {
       old_password: oldPassword,
-      new_password: newPassword
+      new_password: newPassword,
     };
-    if(replacePass !== newPassword){
+    if (replacePass !== newPassword) {
       Swal.fire({
         icon: "error",
         title: "",
         text: "Passwords Don't Match ( oldPassword and newPassword )",
-      }).then(r => {});
-    }else {
+      }).then((r) => {});
+    } else {
       editPassword(currentUser.token, changePass).then((response) => {
         if (response.status === 200) {
           Swal.fire({
@@ -110,9 +134,9 @@ function EditProfile() {
             timer: 1000,
           });
           setShowCreate(false);
-          setOldPassword("")
-          setNewPassword("")
-          setReplacePass("")
+          setOldPassword("");
+          setNewPassword("");
+          setReplacePass("");
         } else {
           Swal.fire({
             icon: "error",
@@ -122,8 +146,7 @@ function EditProfile() {
         }
       });
     }
-
-  }
+  };
   if (loading) return <p> Loading </p>;
   if (!user) return <p>No User</p>;
   return (
@@ -251,68 +274,66 @@ function EditProfile() {
       </div>
       <Footer />
       <Modal
-          show={showCreate}
-          onHide={() => {
-            setShowCreate(false);
-            setOldPassword("")
-            setNewPassword("")
-            setReplacePass("")
-          }}
+        show={showCreate}
+        onHide={() => {
+          setShowCreate(false);
+          setOldPassword("");
+          setNewPassword("");
+          setReplacePass("");
+        }}
       >
         <Modal.Header closeButton>
           <Modal.Title>Change Password</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <TextField
-              label="Old Password"
-              type="password"
-              variant="outlined"
-              className="form-control"
-              size="small"
-              value={oldPassword}
-              onChange={(e)=>setOldPassword(e.target.value)}
+            label="Old Password"
+            type="password"
+            variant="outlined"
+            className="form-control"
+            size="small"
+            value={oldPassword}
+            onChange={(e) => setOldPassword(e.target.value)}
           />
           <TextField
-              label="New Password"
-              type="password"
-              variant="outlined"
-              className="form-control"
-              size="small"
-              value={newPassword}
-              style={{marginTop:"20px"}}
-              onChange={(e)=>setNewPassword(e.target.value)}
-
+            label="New Password"
+            type="password"
+            variant="outlined"
+            className="form-control"
+            size="small"
+            value={newPassword}
+            style={{ marginTop: "20px" }}
+            onChange={(e) => setNewPassword(e.target.value)}
           />
           <TextField
-              label="Replace Password"
-              type="password"
-              variant="outlined"
-              className="form-control"
-              size="small"
-              value={replacePass}
-              style={{marginTop:"20px"}}
-              onChange={(e)=>setReplacePass(e.target.value)}
-
+            label="Replace Password"
+            type="password"
+            variant="outlined"
+            className="form-control"
+            size="small"
+            value={replacePass}
+            style={{ marginTop: "20px" }}
+            onChange={(e) => setReplacePass(e.target.value)}
           />
         </Modal.Body>
         <Modal.Footer>
           <button
-              type="button"
-              className="btn btn-secondary"
-              data-bs-dismiss="modal"
-              onClick={() => {
-                setShowCreate(false);
-                setOldPassword("")
-                setNewPassword("")
-                setReplacePass("")
-              }}
+            type="button"
+            className="btn btn-secondary"
+            data-bs-dismiss="modal"
+            onClick={() => {
+              setShowCreate(false);
+              setOldPassword("");
+              setNewPassword("");
+              setReplacePass("");
+            }}
           >
             Cancel
           </button>
           <button
-              type="button"
-              className="btn btn-primary"
-              onClick={changePassword}
+            type="button"
+            className="btn btn-primary"
+            onClick={changePassword}
           >
             save
           </button>

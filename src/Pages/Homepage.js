@@ -3,13 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { Modal, Card } from "react-bootstrap";
 import { Groups, Person, Add, HighlightOff } from "@mui/icons-material";
 import { TextField, Tooltip } from "@mui/material";
-import {getGroups, getGroupsManage} from "../services/auth";
+import { getGroups, getGroupsManage } from "../services/auth";
 import Footer from "../components/Footer";
 import Navbar from "../components/ResponsiveAppBar";
 import { createGroup } from "../services/auth";
 import { deleteGroup } from "../services/GroupService";
+import * as SockJS from "sockjs-client";
+import * as Stomp from "stompjs";
 import Swal from "sweetalert2";
 
+let stompClient = null;
 function Homepage() {
   const navigate = useNavigate();
   const [state, setState] = useState(1);
@@ -25,6 +28,7 @@ function Homepage() {
     if (!localStorage.getItem("currentUser")) {
       navigate("/login?redirect=");
     }
+    connect();
     getGroups(user?.token).then((data) => {
       setGroupJoin([]);
       let obj = null;
@@ -40,11 +44,33 @@ function Homepage() {
       }
       setGroupJoin(join);
     });
-    getGroupsManage(user?.token).then((data)=>{
+    getGroupsManage(user?.token).then((data) => {
       setGroupOwner(data.groups_data);
       setGroupRender(data.groups_data);
     });
   }, [render]);
+
+  const connect = () => {
+    let Sock = new SockJS("https://kameyoko-api-production.up.railway.app/ws");
+    stompClient = Stomp.over(Sock);
+    stompClient.connect({}, onConnected, onError);
+    stompClient.debug = null;
+  };
+
+  const onConnected = () => {
+    stompClient.subscribe("/topic/chat/" + user.user.id, onPrivateMessage);
+  };
+
+  const onPrivateMessage = (payload) => {
+    Swal.fire({
+      icon: "info",
+      title: "New message: " + payload.body,
+    });
+  };
+
+  const onError = (err) => {
+    console.log(err);
+  };
 
   const handleCloseCreate = () => {
     createGroup(inputCreate, user.token).then((response) => {

@@ -34,7 +34,10 @@ function App() {
           <Route path="/result/public/:id" element={<Result />} />
           <Route path="/result/group/:idGroup/:id" element={<ResultGroup />} />
           <Route path="/presentation/public/:id" element={<ChoiceQuestion />} />
-          <Route path="/presentation/group/:idGroup/:id" element={<PresentationGroup />} />
+          <Route
+            path="/presentation/group/:idGroup/:id"
+            element={<PresentationGroup />}
+          />
           <Route path="/profile" element={<EditProfile />} />
           <Route exact path="/create-group" element={<CreateGroup />} />
           <Route path="/join-group/:id" element={<JoinGroup />} />
