@@ -179,9 +179,11 @@ export default function ChoiceQuestion(props) {
             }
         </div>
       </Container>
-        <div className="row py-5" style={{marginTop:"20px"}}>
-            <Question id={params.id} role="member"></Question>
-        </div>
+        <Container style={{textAlign: "center" , marginTop:"80px"}}>
+            <div className="row py-5" style={{marginTop:"20px"}}>
+                <Question id={params.id} role="member"></Question>
+            </div>
+        </Container>
       {/*<Container style={{ marginTop: "20px", textAlign: "center" }}>*/}
       {/*  <ButtonComponent name={"Prev"} parentPrevClick={handleClickPrev} disable={checkPrevDisable}/>*/}
       {/*  <ButtonComponent name={"Next"} parentNextClick={handleClickNext} disable={checkNextDisable}/>*/}

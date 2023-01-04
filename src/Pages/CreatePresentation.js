@@ -90,7 +90,7 @@ const CreatePresentation = () => {
     }
     await createShowPresentToGroup(body, userInfo.token, id).then((response) => {
       if (response.status === 200) {
-        window.open("/result/group/" + id, "_blank")
+        window.open("/result/group/" + idGroup +"/"+ id, "_blank")
         setShowCreate(false)
       } else {
         Swal.fire({

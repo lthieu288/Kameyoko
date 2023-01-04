@@ -13,7 +13,7 @@ const ButtonComponent = (props) => {
             {
                 props.disable ?
                     <button
-                        style={{ fontSize: "25px",textAlign: "right" , margin:"100px"}}
+                        style={{ fontSize: "25px",textAlign: "right" , margin:"100px", marginTop:"20px", marginBottom:"20px"}}
                         className="btn btn-primary px-5"
                         type="submit"
                         disabled
@@ -22,7 +22,7 @@ const ButtonComponent = (props) => {
                     </button>
                     :
                     <button
-                        style={{ fontSize: "25px",textAlign: "right", margin:"100px" }}
+                        style={{ fontSize: "25px",textAlign: "right",margin:"100px", marginTop:"20px", marginBottom:"20px"}}
                         className="btn btn-primary px-5"
                         type="submit"
                         onClick={ props.name === "Next" ? onClickNextButton : onClickPrevButton}

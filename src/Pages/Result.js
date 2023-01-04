@@ -130,7 +130,7 @@ function Result() {
           </div>
         </div>
       </div>
-      <Container style={{ marginTop: "10px", textAlign: "center" }}>
+      <Container style={{textAlign: "center" }}>
         <ButtonComponent
           name={"Prev"}
           parentPrevClick={prevButton}
@@ -142,9 +142,11 @@ function Result() {
           disable={checkNextDisable}
         />
       </Container>
-      <div className="row py-5">
-        <Question id={params.id} role="owner" style={{padding:"20px"}}></Question>
-      </div>
+      <Container style={{textAlign: "center" }}>
+        <div className="row py-5">
+          <Question id={params.id} role="owner" style={{padding:"20px"}}></Question>
+        </div>
+      </Container>
     </div>
   );
 }

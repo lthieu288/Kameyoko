@@ -32,7 +32,7 @@ function App() {
           <Route path="/view-host" element={<ViewForTheHost />} />
           <Route path="/view-host-public" element={<ViewForTheHost />} />
           <Route path="/result/public/:id" element={<Result />} />
-          <Route path="/result/group/:id" element={<ResultGroup />} />
+          <Route path="/result/group/:idGroup/:id" element={<ResultGroup />} />
           <Route path="/presentation/public/:id" element={<ChoiceQuestion />} />
           <Route path="/presentation/group/:idGroup/:id" element={<PresentationGroup />} />
           <Route path="/profile" element={<EditProfile />} />

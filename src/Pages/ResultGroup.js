@@ -9,8 +9,6 @@ import Chat from "./Chat";
 import Question from "../components/Question";
 
 function ResultGroup(props) {
-    console.log("ResultGroup")
-    console.log(props.role)
     const navigate = useNavigate();
     const userInfo = JSON.parse(localStorage.getItem("currentUser"));
     const params = useParams();
@@ -101,22 +99,24 @@ function ResultGroup(props) {
                         <Slide2 token={userInfo?.token} id={params.id} listSlide={listSlideSocket}/>
                     </div>
                     <div className="col-3">
-                        <Chat id={params.id}></Chat>
+                        <Chat id={params?.id} idGroup={params?.idGroup}></Chat>
                     </div>
                 </div>
             </div>
-            <Container style={{ marginTop: "20px",textAlign: "center" }}>
+            <div style={{textAlign: "center" }}>
                 <ButtonComponent name={"Prev"} parentPrevClick={prevButton} disable={checkPrevDisable}/>
                 <ButtonComponent name={"Next"} parentNextClick={nextButton} disable={checkNextDisable}/>
-            </Container>
-            <div className="row py-5">
-                {
-                    props?.role === undefined?
-                        <Question id={params.id} role="owner"></Question>
-                        :
-                        <Question id={params.id} role={props.role}></Question>
-                }
             </div>
+            <Container style={{textAlign: "center" }}>
+                <div className="row py-5">
+                    {
+                        props?.role === undefined?
+                            <Question id={params.id} role="owner"></Question>
+                            :
+                            <Question id={params.id} role={props.role}></Question>
+                    }
+                </div>
+            </Container>
         </div>
     );
 }
