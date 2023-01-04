@@ -39,7 +39,7 @@ function ResultGroup() {
                     if(1 === res.data.slides.length){
                         setCheckNextDisable(true)
                     }
-                    let socket = new WebSocket(`ws://localhost:7777/ws?presId=${params.id}`);
+                    let socket = new WebSocket(`ws://kameyoko.up.railway.app/ws?presId=${params.id}`);
                     socket.onopen = function () {
                         socket.send(res.data.slides[0].id)
                         socket.onmessage = (msg) => {
@@ -57,7 +57,7 @@ function ResultGroup() {
         const num = (number + 1);
         setNumber(number + 1);
         if(listSlide[num].id !== undefined) {
-            let socket = new WebSocket(`ws://localhost:7777/ws?presId=${params.id}`);
+            let socket = new WebSocket(`ws://kameyoko.up.railway.app/ws?presId=${params.id}`);
             socket.onopen = function () {
                 socket.send(listSlide[num].id)
                 socket.onmessage = (msg) => {
@@ -75,7 +75,7 @@ function ResultGroup() {
         const numPrev = (number - 1);
         setNumber(number - 1);
         if(listSlide[numPrev].id !== undefined) {
-            let socket = new WebSocket(`ws://localhost:7777/ws?presId=${params.id}`);
+            let socket = new WebSocket(`ws://kameyoko.up.railway.app/ws?presId=${params.id}`);
             socket.onopen = function () {
                 socket.send(listSlide[numPrev].id)
                 socket.onmessage = (msg) => {

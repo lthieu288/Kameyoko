@@ -23,7 +23,7 @@ export default function ChoiceQuestion() {
       return await getListSlide(userInfo.token, params.id).then(
           (res) => {
             setListSlide(res.data.slides);
-              let socket = new WebSocket(`ws://localhost:7777/ws?presId=${params.id}`);
+              let socket = new WebSocket(`ws://kameyoko.up.railway.app/ws?presId=${params.id}`);
 
               socket.onopen = function () {
                 socket.send(res.data.slides[0].id)
@@ -41,7 +41,7 @@ export default function ChoiceQuestion() {
 
   function saveVote(value){
       if(listSlide[number].id !== undefined) {
-          const socket = new WebSocket(`ws://localhost:7777/ws?presId=${params.id}`);
+          const socket = new WebSocket(`ws://kameyoko.up.railway.app/ws?presId=${params.id}`);
           socket.onopen = function () {
               socket.send(slide.id)
           };
@@ -57,7 +57,7 @@ export default function ChoiceQuestion() {
         });
       }
       postApiVote();
-      const socket = new WebSocket(`ws://localhost:7777/ws?presId=${params.id}`);
+      const socket = new WebSocket(`ws://kameyoko.up.railway.app/ws?presId=${params.id}`);
       socket.onopen = function () {
           socket.send(slide.id)
       };
