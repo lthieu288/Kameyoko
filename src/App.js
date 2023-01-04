@@ -24,7 +24,6 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route index element={<HomePage />} />
           <Route exact path="/" element={<HomePage />} />
           <Route path="/group/:id" element={<GroupDetail />} />
           <Route path="/presentation" element={<Presentation />} />
