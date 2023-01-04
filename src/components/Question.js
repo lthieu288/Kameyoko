@@ -24,7 +24,9 @@ function Question(props) {
 
     getQuestion(presentId).then((res) => {
       console.log(res);
-      setQuestions(res);
+      if (res.length) {
+        setQuestions(res);
+      }
     });
   }, []);
 

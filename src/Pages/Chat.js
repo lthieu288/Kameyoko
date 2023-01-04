@@ -20,7 +20,7 @@ function Chat(props) {
 
     getMessage(presentId, 0).then((res) => {
       console.log(res);
-      if (res.response?.status !== 400) {
+      if (res.length) {
         setMessage(res);
         setOffset(0);
       }
@@ -99,54 +99,57 @@ function Chat(props) {
                   style={{ height: "50vh", overflowY: "auto" }}
                   onScroll={handleScroll}
                 >
-                  {reversed?.map((row, index) =>
-                    user?.user.id !== row.userId ? (
-                      <div
-                        key={index}
-                        class="d-flex flex-row justify-content-start mb-4"
-                      >
-                        <img
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBGwlAahaapmmJ7Riv_L_ZujOcfWSUJnm71g&usqp=CAU"
-                          alt="avatar 1"
-                          style={{
-                            width: "45px",
-                            height: "100%",
-                            marginTop: "18px",
-                          }}
-                        />
-                        <div>
-                          <p class="small ms-3 mb-0 rounded-3 text-muted">
-                            {row.username}
-                          </p>
-                          <p
-                            class="small p-2 ms-3 mb-1 rounded-3"
-                            style={{ backgroundColor: "#f5f6f7" }}
-                          >
-                            {row.message}
-                          </p>
+                  {message
+                    ?.slice()
+                    .reverse()
+                    .map((row, index) =>
+                      user?.user.id !== row.userId ? (
+                        <div
+                          key={index}
+                          class="d-flex flex-row justify-content-start mb-4"
+                        >
+                          <img
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBGwlAahaapmmJ7Riv_L_ZujOcfWSUJnm71g&usqp=CAU"
+                            alt="avatar 1"
+                            style={{
+                              width: "45px",
+                              height: "100%",
+                              marginTop: "18px",
+                            }}
+                          />
+                          <div>
+                            <p class="small ms-3 mb-0 rounded-3 text-muted">
+                              {row.username}
+                            </p>
+                            <p
+                              class="small p-2 ms-3 mb-1 rounded-3"
+                              style={{ backgroundColor: "#f5f6f7" }}
+                            >
+                              {row.message}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    ) : (
-                      <div
-                        key={index}
-                        class="d-flex flex-row justify-content-end mb-4"
-                      >
-                        <div>
-                          <p class="small p-2 me-3 mb-0 text-white rounded-3 bg-primary">
-                            {row.message}
-                          </p>
+                      ) : (
+                        <div
+                          key={index}
+                          class="d-flex flex-row justify-content-end mb-4"
+                        >
+                          <div>
+                            <p class="small p-2 me-3 mb-0 text-white rounded-3 bg-primary">
+                              {row.message}
+                            </p>
+                          </div>
+                          <img
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBGwlAahaapmmJ7Riv_L_ZujOcfWSUJnm71g&usqp=CAU"
+                            alt="avatar 1"
+                            style={{
+                              width: "45px",
+                              height: "100%",
+                            }}
+                          />
                         </div>
-                        <img
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBGwlAahaapmmJ7Riv_L_ZujOcfWSUJnm71g&usqp=CAU"
-                          alt="avatar 1"
-                          style={{
-                            width: "45px",
-                            height: "100%",
-                          }}
-                        />
-                      </div>
-                    )
-                  )}
+                      )
+                    )}
                 </div>
                 <div ref={messagesEndRef} />
                 <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
