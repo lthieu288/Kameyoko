@@ -15,7 +15,7 @@ import {
   TextField,
   InputAdornment,
 } from "@mui/material";
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 import Swal from "sweetalert2";
 import { AccountCircle, MoreHoriz, GroupAdd } from "@mui/icons-material";

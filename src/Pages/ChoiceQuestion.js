@@ -23,8 +23,9 @@ export default function ChoiceQuestion() {
       return await getListSlide(userInfo.token, params.id).then(
           (res) => {
             setListSlide(res.data.slides);
-            let socket = new WebSocket(`ws://localhost:7777/ws?presId=${params.id}`);
-            socket.onopen = function () {
+              let socket = new WebSocket(`ws://localhost:7777/ws?presId=${params.id}`);
+
+              socket.onopen = function () {
                 socket.send(res.data.slides[0].id)
                 socket.onmessage = (msg) => {
                     setType(JSON.parse(msg.data).type)

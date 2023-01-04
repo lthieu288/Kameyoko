@@ -74,6 +74,8 @@ const CreatePresentation = () => {
 
   }, [render]);
 
+  console.log(render)
+
   const checkSlide = () => {
     setCheckOnChoice(false)
   };
