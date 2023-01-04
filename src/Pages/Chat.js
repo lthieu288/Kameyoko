@@ -14,6 +14,7 @@ function Chat(props) {
   const [offset, setOffset] = useState(0);
   const messagesEndRef = useRef(null);
   const presentId = props.id;
+  const idGroup = props.idGroup;
 
   useEffect(() => {
     connect();
@@ -71,7 +72,7 @@ function Chat(props) {
   };
 
   const handleClick = () => {
-    sendMessage(presentId, user.user.id, text, user.user.username);
+    sendMessage(presentId, user.user.id, text, user.user.username, idGroup);
     setText("");
   };
 
@@ -82,7 +83,6 @@ function Chat(props) {
     }
   };
 
-  const reversed = Array.isArray(message) ? message.slice().reverse() : message;
   return (
     <>
       <section>
