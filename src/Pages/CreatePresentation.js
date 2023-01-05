@@ -29,7 +29,7 @@ const CreatePresentation = () => {
   const [showCreate, setShowCreate] = useState(false);
   const [listGroup,setListGroup] = useState([])
   const [idGroup,setIdGroup] = useState()
-  const host = "http://localhost:3000/presentation/public/";
+  const host = "https://kameyoko-lime.vercel.app/presentation/public/";
 
   const createNewSlide = () => {
     setDisable(true);

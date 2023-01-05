@@ -107,7 +107,7 @@ function Result() {
               style={{ color: "rgb(37, 43, 54)", fontWeight: "700" }}
               to={"/view-host"}
             >
-              http://localhost:3000/view-host
+              https://kameyoko-lime.vercel.app/view-host
             </Link>
           </span>
           <span> use the code </span>

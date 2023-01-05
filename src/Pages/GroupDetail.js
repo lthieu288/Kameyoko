@@ -39,7 +39,7 @@ function GroupDetail() {
   const [email, setEmail] = useState("");
   const [groupPresInfo,setGroupPresInfo] = useState()
   const id = useParams();
-  const host = "http://localhost:3000";
+  const host = "https://kameyoko-lime.vercel.app";
   const userInfo = JSON.parse(localStorage.getItem("currentUser"));
   const [link, setLink] = useState(host);
 
