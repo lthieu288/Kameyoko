@@ -19,7 +19,7 @@ function ResultPublic() {
     async function getAPIListSlide() {
       return await getListSlide(userInfo.token, params.id).then((res) => {
         let socket = new WebSocket(
-          `ws://kameyoko.up.railway.app/ws?presId=${params.id}`
+          `ws://kameyoko.up.railway.app/ws?roomId=${params.id}`
         );
         socket.onopen = function () {
           socket.send(res.data.slides[0].id);
